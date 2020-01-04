@@ -2,5 +2,5 @@
 class HTTPConnector:
     method = 'POST'
 
-    def send_request(self, *args, **kwargs):
+    def send_instruction(self, *args, **kwargs):
         pass
