@@ -1,5 +1,5 @@
 
-from connector import LANConnector
+from connectors.lan import LANConnector
 
 class Device:
     connector = LANConnector
