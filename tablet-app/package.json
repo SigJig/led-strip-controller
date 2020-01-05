@@ -10,10 +10,8 @@
     "start": "electron dist/app.js"
   },
   "devDependencies": {
-    "electron": "^7.1.7"
-  },
-  "dependencies": {
-    "dev": "^0.1.3",
+    "electron": "^7.1.7",
     "typescript": "^3.7.4"
-  }
+  },
+  "dependencies": {}
 }
