@@ -1,0 +1,30 @@
+
+* {
+    font-family: montserrat;
+    color: #fff;
+}
+
+body {
+    background-color: #101010;
+}
+
+#info-section {
+    display: flex;
+    flex: 1;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#clock-text {
+    display: flex;
+    flex: 1;
+    font-size: 3rem;
+}
+
+#idle-text {
+    display: flex;
+    flex: 1;
+    color: #fff;
+}
