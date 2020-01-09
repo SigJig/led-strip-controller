@@ -11,5 +11,6 @@
     "@types/jquery": "^3.3.31",
     "electron": "^7.1.7",
     "typescript": "^3.7.4"
-  }
+  },
+  "dependencies": {}
 }

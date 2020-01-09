@@ -2,16 +2,23 @@
 * {
     font-family: montserrat;
     color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
 }
 
 body {
     background-color: #101010;
+    display: flex;
+    align-items: center;
 }
 
 #info-section {
+    margin: auto;
     display: flex;
-    flex: 1;
-    height: 100%;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -20,11 +27,15 @@ body {
 #clock-text {
     display: flex;
     flex: 1;
-    font-size: 3rem;
+    font-size: 9rem;
+    font-weight: bold;
+    text-align: center;
 }
 
 #idle-text {
     display: flex;
     flex: 1;
     color: #fff;
+    font-size: 2rem;
+    text-align: center;
 }
