@@ -1,4 +1,6 @@
 
+#ifndef COLORS_H
+#define COLORS_H
 #include <Arduino.h>
 
 class ColorPin
@@ -18,5 +20,8 @@ private:
 
 
 struct RGB { double r, g, b; };
+struct RGBW { double r, g, b, w; };
 
 RGB hsv_rgb(uint16_t hue, uint8_t sat, uint8_t val);
+
+#endif // COLORS_H
