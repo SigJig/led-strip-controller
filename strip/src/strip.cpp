@@ -21,6 +21,18 @@ void Strip::clear()
     }
 }
 
+void RGBStrip::set_rgb(RGB rgb)
+{
+    m_pins[0].set_signal(rgb.r);
+    m_pins[1].set_signal(rgb.g);
+    m_pins[2].set_signal(rgb.b);
+}
+
+void RGBStrip::set_hsv(uint16_t hue, double sat, double value)
+{
+    set_rgb(hsv_rgb(hue, sat, value));
+}
+
 void RGBWStrip::set_hsv(uint16_t hue, double sat, double value)
 {
     RGB rgb = hsv_rgb(hue, sat, value);
@@ -30,8 +42,7 @@ void RGBWStrip::set_hsv(uint16_t hue, double sat, double value)
 
 void RGBWStrip::set_rgbw(RGBW rgbw)
 {
-    m_pins[0].set_signal(rgbw.r);
-    m_pins[1].set_signal(rgbw.g);
-    m_pins[2].set_signal(rgbw.b);
+    RGBStrip::set_rgb({rgbw.r, rgbw.g, rgbw.b});
+
     m_pins[3].set_signal(rgbw.w);
 }

@@ -11,6 +11,8 @@ public:
     void show();
     void set_signal(uint8_t sig);
 
+    bool move_to(uint8_t sig);
+
     uint8_t get_signal();
 
 private:
