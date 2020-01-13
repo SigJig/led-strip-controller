@@ -21,7 +21,7 @@ bool ColorPin::move_to(uint8_t to)
 {
   if (to == m_signal) return false;
 
-  set_signal(get_signal() + (to < m_signal ? 1 : -1));
+  set_signal(m_signal + (to < m_signal ? 1 : -1));
 
   return true;
 }
