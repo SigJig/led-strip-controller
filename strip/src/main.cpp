@@ -56,23 +56,26 @@ void loop()
   if (client)
   {
     bool blank = true;
-    Serial.println("Request recieved");
+    Serial.println("Request recieved\n============================");
 
     while (client.connected())
     {
       if (client.available())
       {
         char c = client.read();
-        
+        Serial.print(c);
+
         if (c == '\n')
         {
           if (blank)
           {
             client.println("HTTP/1.1 200 OK");
-            client.println("Connection-Type: text/html");
+            client.println("Content-Type: text/html");
             client.println("Connection: close");
             client.println();
             client.println("<h1>Hello World!</h1>");
+            client.println();
+
             break;
           }
           else
@@ -80,15 +83,15 @@ void loop()
             blank = true;
           }
         }
-        else
+        else if (c != '\r')
         {
           blank = false;
         }
         
       }
     }
+    Serial.println("=================================\nEnd request");
 
     client.stop();
-    delay(1);
   }
 }
