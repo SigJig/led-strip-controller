@@ -17,7 +17,7 @@ void ColorPin::set_signal(uint8_t sig)
     m_signal = sig;
 }
 
-bool ColorPin::move_to(uint8_t to)
+bool ColorPin::move_towards(uint8_t to)
 {
   if (to == m_signal) return false;
 

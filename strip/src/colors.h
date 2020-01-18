@@ -11,7 +11,7 @@ public:
     void show();
     void set_signal(uint8_t sig);
 
-    bool move_to(uint8_t sig);
+    bool move_towards(uint8_t sig);
 
     uint8_t get_signal();
 
@@ -19,7 +19,6 @@ private:
     uint8_t m_pin;
     uint8_t m_signal;
 };
-
 
 struct RGB { double r, g, b; };
 struct RGBW { double r, g, b, w; };

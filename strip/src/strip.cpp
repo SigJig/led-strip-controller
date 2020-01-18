@@ -46,3 +46,27 @@ void RGBWStrip::set_rgbw(RGBW rgbw)
 
     m_pins[3].set_signal(rgbw.w);
 }
+
+void RGBWStrip::commit_rgbw(RGBW rgbw, unsigned long ms)
+{
+    double color_list[] = {rgbw.r, rgbw.g, rgbw.b, rgbw.w};
+
+    auto still_valid = [&]()
+    {
+        bool valid = false;
+
+        for (uint8_t i = 0; i < m_num_pins; i++)
+        {
+            if (m_pins[i].move_towards(color_list[i])) valid = true;
+        }
+
+        return valid;
+    };
+
+    while (still_valid())
+    {
+        show();
+
+        delay(ms);
+    }
+}

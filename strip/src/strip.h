@@ -33,6 +33,8 @@ class RGBWStrip : public RGBStrip
 public:
     using RGBStrip::RGBStrip;
 
+    void commit_rgbw(RGBW rgbw, unsigned long ms);
+
     void set_rgbw(RGBW rgbw);
     void set_hsv(uint16_t hue, double sat, double val);
 private:
