@@ -14,8 +14,8 @@ const char* password = NETWORK_PASS;
 
 #define NUM_STRIPS 2
 
-ColorPin s1[] = {2, 3, 5};
-ColorPin s2[] = {6, 9, 10};
+ColorPin s1[] = {6, 8, 9};
+ColorPin s2[] = {12, 13, 14};
 
 RGBStrip strips[NUM_STRIPS] = {s1, s2};
 
@@ -37,13 +37,16 @@ void setup()
     auto strip = strips[i];
     strip.init();
     
-    strip.set_rgb({0, 255, 0});
+    strip.set_rgb({255, 255, 255});
   }
 }
 
 void loop()
 {
-  for (uint8_t i = 0; i < NUM_STRIPS; i++) strips[i].show();
+  for (uint8_t i = 0; i < NUM_STRIPS; i++) 
+  {
+    strips[i].show();
+  }
 
 #ifdef no
   if (millis() % 2000 == 0)
