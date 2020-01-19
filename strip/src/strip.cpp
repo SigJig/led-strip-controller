@@ -7,26 +7,22 @@ Strip::Strip(ColorPin pins[])
 
 void Strip::show()
 {
-    for (uint8_t i = 0; i < m_num_pins; i++)
-    {
-        m_pins[i].show();
-    }
+    for (auto i : m_pins) i.show();
 }
 
 void Strip::clear()
 {
-    for (uint8_t i = 0; i < m_num_pins; i++)
-    {
-        m_pins[i].set_signal(0);
-    }
+    for (auto i : m_pins) i.set_signal(0);
 }
 
 bool Strip::move_towards(double* colors)
 {
     bool valid = false;
 
-    for (uint8_t i = 0; i < m_num_pins; i++)
+    for (uint8_t i = 0; i < m_pins.size(); i++)
     {
+        auto pin = m_pins[i];
+
         if (m_pins[i].move_towards(colors[i])) valid = true;
     }
 

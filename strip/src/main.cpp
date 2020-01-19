@@ -35,8 +35,7 @@ void setup()
   
   for (uint8_t i = 0; i < NUM_STRIPS; i++) {
     auto strip = strips[i];
-    strip.init();
-    
+  
     strip.set_rgb({255, 255, 255});
   }
 }
