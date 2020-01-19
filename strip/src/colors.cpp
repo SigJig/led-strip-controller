@@ -2,7 +2,7 @@
 #include "colors.h"
 #include <math.h>
 
-ColorPin::ColorPin(uint8_t pin, uint8_t signal) : m_pin(pin), m_signal(signal)
+ColorPin::ColorPin(uint8_t pin) : m_pin(pin), m_signal(0)
 {
     pinMode(m_pin, OUTPUT);
 }

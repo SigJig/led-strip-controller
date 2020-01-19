@@ -14,10 +14,10 @@ const char* password = NETWORK_PASS;
 
 #define NUM_STRIPS 2
 
-ColorPin s1[] = {6, 8, 9, 100};
-ColorPin s2[] = {12, 13, 14, 100};
+ColorPin s1[] = {2, 3, 5};
+ColorPin s2[] = {6, 9, 10};
 
-RGBWStrip strips[NUM_STRIPS] = {s1, s2};
+RGBStrip strips[NUM_STRIPS] = {s1, s2};
 
 void setup()
 {
@@ -33,25 +33,39 @@ void setup()
 
   Serial.println("Wifi connection established");
   
-  for (uint8_t i = 0; i < NUM_STRIPS; i++) strips[i].set_rgb({255, 0, 0});
+  for (uint8_t i = 0; i < NUM_STRIPS; i++) {
+    auto strip = strips[i];
+    strip.init();
+    
+    strip.set_rgb({0, 255, 0});
+  }
 }
 
 void loop()
 {
-  if (millis() % 10000 == 0)
+  for (uint8_t i = 0; i < NUM_STRIPS; i++) strips[i].show();
+
+#ifdef no
+  if (millis() % 2000 == 0)
   {
-    auto gr = [&](RGBW rgbw)
+    Serial.println("Initializing change");
+    auto gr = [&](RGB rgb)
     {
       for (uint8_t i = 0; i < NUM_STRIPS; i++)
       {
         auto strip = strips[i];
 
-        strip.commit_rgbw(rgbw, 1);
+        strip.commit_rgb(rgb, 1);
       }
     };
-    gr({255, 170, 0, 0});
+    gr({255, 170, 0});
+    Serial.println("Changed first, changing back");
     delay(1000);
-    gr({170, 0, 255, 0});
+    gr({170, 0, 255});
+    Serial.println("Changed back");
   }
-  
+
+
+  for (uint8_t i = 0; i < NUM_STRIPS; i++) strips[i].show();
+#endif
 }

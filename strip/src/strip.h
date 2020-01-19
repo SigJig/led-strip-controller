@@ -9,6 +9,10 @@ class Strip
 public:
     Strip(ColorPin pins[]);
 
+    bool move_towards(double* colors);
+
+    void commit(double* colors, unsigned long ms);
+
     void show();
     void clear();
 
@@ -21,6 +25,10 @@ class RGBStrip : public Strip
 {
 public:
     using Strip::Strip;
+
+    void init() { for (uint8_t i = 0; i < m_num_pins; i++) m_pins[i].init(); }
+
+    void commit_rgb(RGB rgb, unsigned long ms);
 
     void set_rgb(RGB rgb);
     void set_hsv(uint16_t hue, double sat, double val);

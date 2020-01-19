@@ -6,10 +6,12 @@
 class ColorPin
 {
 public:
-    ColorPin(uint8_t pin, uint8_t signal = 0);
+    ColorPin(uint8_t pin);
 
     void show();
     void set_signal(uint8_t sig);
+
+    void init() { pinMode(m_pin, OUTPUT); };
 
     bool move_towards(uint8_t sig);
 
