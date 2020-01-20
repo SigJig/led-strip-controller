@@ -3,12 +3,12 @@
 #define STRIP_H
 
 #include "colors.h"
-#include <vector>
 
+template<typename T>
 class Strip
 {
 public:
-    Strip(const std::vector<ColorPin> pins);
+    Strip(ColorPin* pins);
 
     bool move_towards(double* colors);
 
@@ -18,10 +18,12 @@ public:
     void clear();
 
 protected:
-    const std::vector<ColorPin> m_pins;
+    const ColorPin* m_pins;
+
+    static const uint8_t num_pins = 0;
 };
 
-class RGBStrip : public Strip
+class RGBStrip : public Strip<RGBStrip>
 {
 public:
     using Strip::Strip;

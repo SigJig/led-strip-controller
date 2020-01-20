@@ -1,7 +1,7 @@
 
 #include "strip.h"
 
-Strip::Strip(ColorPin pins[])
+Strip::Strip(std::vector<ColorPin> pins)
     : m_pins(pins)
 {  }
 
@@ -23,7 +23,7 @@ bool Strip::move_towards(double* colors)
     {
         auto pin = m_pins[i];
 
-        if (m_pins[i].move_towards(colors[i])) valid = true;
+        if (pin.move_towards(colors[i])) valid = true;
     }
 
     return valid;
