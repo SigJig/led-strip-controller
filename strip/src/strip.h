@@ -4,7 +4,6 @@
 
 #include "colors.h"
 
-template<typename T>
 class Strip
 {
 public:
@@ -18,19 +17,23 @@ public:
     void clear();
 
 protected:
-    const ColorPin* m_pins;
+    ColorPin* m_pins;
 
-    static const uint8_t num_pins = 0;
+    static const uint8_t num_pins = 3;
 };
 
-class RGBStrip : public Strip<RGBStrip>
+class RGBStrip : public Strip
 {
 public:
     using Strip::Strip;
+
     void commit_rgb(RGB rgb, unsigned long ms);
 
     void set_rgb(RGB rgb);
     void set_hsv(uint16_t hue, double sat, double val);
+
+protected:
+    static const uint8_t num_pins = 3;
 };
 
 class RGBWStrip : public RGBStrip
@@ -42,6 +45,9 @@ public:
 
     void set_rgbw(RGBW rgbw);
     void set_hsv(uint16_t hue, double sat, double val);
+
+protected:
+    static const uint8_t num_pins = 4;
 };
 
 #endif // STRIP_H

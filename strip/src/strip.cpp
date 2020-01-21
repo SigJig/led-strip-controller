@@ -1,25 +1,25 @@
 
 #include "strip.h"
 
-Strip::Strip(std::vector<ColorPin> pins)
+Strip::Strip(ColorPin* pins)
     : m_pins(pins)
 {  }
 
 void Strip::show()
 {
-    for (auto i : m_pins) i.show();
+    for (uint8_t i = 0; i < num_pins; i++) m_pins[i].show();
 }
 
 void Strip::clear()
 {
-    for (auto i : m_pins) i.set_signal(0);
+    for (uint8_t i = 0; i < num_pins; i++) m_pins[i].set_signal(0);
 }
 
 bool Strip::move_towards(double* colors)
 {
     bool valid = false;
 
-    for (uint8_t i = 0; i < m_pins.size(); i++)
+    for (uint8_t i = 0; i < num_pins; i++)
     {
         auto pin = m_pins[i];
 
