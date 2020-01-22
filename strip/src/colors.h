@@ -3,6 +3,8 @@
 #define COLORS_H
 #include <Arduino.h>
 
+#include "cyclehandler.h"
+
 class ColorPin
 {
 public:
@@ -11,13 +13,13 @@ public:
     void show();
     void set_signal(uint8_t sig);
 
-    void init() { pinMode(m_pin, OUTPUT); };
-
     bool move_towards(uint8_t sig);
 
     uint8_t get_signal();
 
-private:
+protected:
+    CallbackStatus cycle_show();
+
     uint8_t m_pin;
     uint8_t m_signal;
 };

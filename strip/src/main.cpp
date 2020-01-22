@@ -11,6 +11,7 @@ const char* ssid = NETWORK_SSID;
 const char* password = NETWORK_PASS;
 
 #include "strip.h"
+#include "cyclehandler.h"
 
 #define NUM_STRIPS 2
 
@@ -21,23 +22,20 @@ RGBStrip strips[NUM_STRIPS] = {s1, s2};
 
 void setup()
 {
-  Serial.begin(BAUD_RATE);
+    Serial.begin(BAUD_RATE);
 
-  Serial.println("Connecting to Wifi");
-  WiFi.begin(ssid, password);
+    Serial.println("Connecting to Wifi");
+    WiFi.begin(ssid, password);
 
-  for (int time = millis(); WiFi.status() != WL_CONNECTED; time = millis())
-  {
-    if ((time % 2000) == 0) Serial.println("Connecting...");
-  }
+    for (int time = millis(); WiFi.status() != WL_CONNECTED; time = millis())
+    {
+      if ((time % 2000) == 0) Serial.println("Connecting...");
+    }
 
-  Serial.println("Wifi connection established");
+    Serial.println("Wifi connection established");
 }
 
 void loop()
 {
-  for (uint8_t i = 0; i < NUM_STRIPS; i++) strips[i].show();
-  analogWrite(9, 255);
-
-  delay(1);
+    cycle_handler.run();
 }
