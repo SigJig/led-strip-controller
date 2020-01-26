@@ -3,6 +3,7 @@
 #define STRIP_H
 
 #include "colors.h"
+#include "cyclehandler.h"
 
 class Strip
 {
@@ -11,13 +12,14 @@ public:
 
     bool move_towards(double* colors);
 
-    void commit(double* colors, unsigned long ms);
-
     void show();
     void clear();
 
 protected:
     ColorPin* m_pins;
+
+    bool m_shown;
+    QueueItem* m_queue_item;
 
     static const uint8_t num_pins = 3;
 };
@@ -27,7 +29,7 @@ class RGBStrip : public Strip
 public:
     using Strip::Strip;
 
-    void commit_rgb(RGB rgb, unsigned long ms);
+    void commit_rgb(RGB rgb);
 
     void set_rgb(RGB rgb);
     void set_hsv(uint16_t hue, double sat, double val);
@@ -41,7 +43,7 @@ class RGBWStrip : public RGBStrip
 public:
     using RGBStrip::RGBStrip;
 
-    void commit_rgbw(RGBW rgbw, unsigned long ms);
+    void commit_rgbw(RGBW rgbw);
 
     void set_rgbw(RGBW rgbw);
     void set_hsv(uint16_t hue, double sat, double val);

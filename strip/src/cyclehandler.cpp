@@ -7,7 +7,7 @@ _CycleHandler::_CycleHandler()
     : m_queue(nullptr)
 {  }
 
-QueueItem* _CycleHandler::add(Functor& cb)
+QueueItem* _CycleHandler::add(std::function<CallbackStatus()> cb)
 {
     QueueItem* qi = new QueueItem();
 
@@ -31,6 +31,14 @@ QueueItem* _CycleHandler::add(Functor& cb)
     return qi;
 }
 
+void _CycleHandler::queue_remove(QueueItem* qi)
+{
+    qi->last->next = qi->next;
+    qi->next->last = qi->last;
+
+    delete qi;
+}
+
 void _CycleHandler::process_callback(QueueItem* qi)
 {
     CallbackStatus ret = qi->cb();
@@ -41,7 +49,7 @@ void _CycleHandler::process_callback(QueueItem* qi)
     }
     else if (!(ret & REPEAT)) // Remove the queue item if its not supposed to repeat
     {
-        delete qi;
+        queue_remove(qi);
     }
 }
 

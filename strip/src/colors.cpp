@@ -2,7 +2,7 @@
 #include "colors.h"
 #include <math.h>
 
-ColorPin::ColorPin(uint8_t pin) : m_pin(pin), m_signal(0)
+ColorPin::ColorPin(uint8_t pin) : m_pin(pin), m_signal(0), m_queue_item(nullptr)
 {
     pinMode(m_pin, OUTPUT);
 }
@@ -12,13 +12,15 @@ void ColorPin::set_signal(uint8_t sig)
     m_signal = sig;
 }
 
-void ColorPin::show()
+void ColorPin::show(bool dead = false)
 {
-    analogWrite(m_pin, m_signal);
+    analogWrite(m_pin, dead ? 0 : m_signal);
 }
 
 QueueItem* ColorPin::move_towards(uint8_t to)
 {
+    if (m_queue_item != nullptr) cycle_handler.queue_remove(m_queue_item);
+
     return cycle_handler.add([&, this]()
     {
         if (to == this->m_signal) return SUCCESS;

@@ -13,8 +13,8 @@ enum CallbackStatus : uint8_t
 
 struct QueueItem
 {
-    QueueItem* next = nullptr;
-    T& cb;
+    QueueItem* next, * last = nullptr;
+    std::function<CallbackStatus()> cb;
 };
 
 class _CycleHandler
@@ -22,7 +22,9 @@ class _CycleHandler
 public:
     _CycleHandler();
 
-    QueueItem* add(Functor& cb);
+    QueueItem* add(std::function<CallbackStatus()> cb);
+
+    bool queue_remove(QueueItem* qi);
 
     void run();
     void clear();

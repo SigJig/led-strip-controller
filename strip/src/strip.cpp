@@ -2,12 +2,25 @@
 #include "strip.h"
 
 Strip::Strip(ColorPin* pins)
-    : m_pins(pins)
-{  }
+    : m_pins(pins), m_shown(true)
+{
+    m_queue_item = cycle_handler.add([&, this]()
+    {
+        for (uint8_t i = 0; i < num_pins; i++)
+        {
+            m_pins[i].show(m_shown);
+        }
+    });
+}
 
 void Strip::show()
 {
-    for (uint8_t i = 0; i < num_pins; i++) m_pins[i].show();
+    m_shown = true;
+}
+
+void Strip::hide()
+{
+    m_shown = false;
 }
 
 void Strip::clear()
@@ -15,27 +28,11 @@ void Strip::clear()
     for (uint8_t i = 0; i < num_pins; i++) m_pins[i].set_signal(0);
 }
 
-bool Strip::move_towards(double* colors)
+void Strip::move_towards(double* colors)
 {
-    bool valid = false;
-
     for (uint8_t i = 0; i < num_pins; i++)
     {
-        auto pin = m_pins[i];
-
-        if (pin.move_towards(colors[i])) valid = true;
-    }
-
-    return valid;
-}
-
-void Strip::commit(double* colors, unsigned long ms)
-{
-    while (move_towards(colors))
-    {
-        show();
-
-        delay(ms);
+        pin.move_towards(colors[i]);
     }
 }
 
@@ -53,11 +50,11 @@ void RGBStrip::set_hsv(uint16_t hue, double sat, double value)
     set_rgb(hsv_rgb(hue, sat, value));
 }
 
-void RGBStrip::commit_rgb(RGB rgb, unsigned long ms)
+void RGBStrip::commit_rgb(RGB rgb)
 {
     double colors[] = {rgb.r, rgb.g, rgb.b};
 
-    return commit(colors, ms);
+    return move_towards(colors);
 }
 
 void RGBWStrip::set_hsv(uint16_t hue, double sat, double value)
@@ -74,9 +71,9 @@ void RGBWStrip::set_rgbw(RGBW rgbw)
     m_pins[3].set_signal(rgbw.w);
 }
 
-void RGBWStrip::commit_rgbw(RGBW rgbw, unsigned long ms)
+void RGBWStrip::commit_rgbw(RGBW rgbw)
 {
     double color_list[] = {rgbw.r, rgbw.g, rgbw.b, rgbw.w};
 
-    return commit(color_list, ms);
+    return move_towards(color_list);
 }
