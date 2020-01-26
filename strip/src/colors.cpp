@@ -7,33 +7,31 @@ ColorPin::ColorPin(uint8_t pin) : m_pin(pin), m_signal(0)
     pinMode(m_pin, OUTPUT);
 }
 
-void ColorPin::show()
-{
-    cycle_handler.add(cycle_show);
-}
-
 void ColorPin::set_signal(uint8_t sig)
 {
     m_signal = sig;
 }
 
-bool ColorPin::move_towards(uint8_t to)
+void ColorPin::show()
 {
-    if (to == m_signal) return false;
+    analogWrite(m_pin, m_signal);
+}
 
-    set_signal(m_signal + (to < m_signal ? 1 : -1));
+QueueItem* ColorPin::move_towards(uint8_t to)
+{
+    return cycle_handler.add([&, this]()
+    {
+        if (to == this->m_signal) return SUCCESS;
 
-    return true;
+        this->set_signal(this->m_signal + (to < this->m_signal ? 1 : -1));
+
+        return REPEAT;
+    });
 }
 
 uint8_t ColorPin::get_signal()
 {
     return m_signal;
-}
-
-CallbackStatus ColorPin::cycle_show()
-{
-    analogWrite(m_pin, m_signal);
 }
 
 RGB hsv_rgb(uint16_t hue, uint8_t sat, uint8_t val)

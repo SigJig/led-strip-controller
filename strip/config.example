@@ -4,7 +4,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define SSID "network-ssid"
-#define PASSWORD "network-password"
+#define NETWORK_SSID "network-ssid"
+#define NETWORK_PASS "network-password"
 
 #endif // CONFIG_H

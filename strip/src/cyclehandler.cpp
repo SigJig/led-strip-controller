@@ -7,7 +7,7 @@ _CycleHandler::_CycleHandler()
     : m_queue(nullptr)
 {  }
 
-void _CycleHandler::add(callback_fnc cb)
+QueueItem* _CycleHandler::add(Functor& cb)
 {
     QueueItem* qi = new QueueItem();
 
@@ -27,6 +27,8 @@ void _CycleHandler::add(callback_fnc cb)
 
         _i->next = qi;
     }
+
+    return qi;
 }
 
 void _CycleHandler::process_callback(QueueItem* qi)
@@ -59,7 +61,7 @@ void _CycleHandler::run()
 
 void _CycleHandler::clear()
 {
-    for (QueueItem* qi; qi->next != nullptr;)
+    for (QueueItem* qi = m_queue; qi->next != nullptr;)
     {
         auto next = qi->next;
         delete qi;

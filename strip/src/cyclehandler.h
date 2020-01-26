@@ -6,16 +6,15 @@
 
 enum CallbackStatus : uint8_t
 {
+    SUCCESS = 0x00,
     ERROR = 0x01,
     REPEAT = 0x02,
 };
 
-typedef CallbackStatus (*callback_fnc)();
-
 struct QueueItem
 {
     QueueItem* next = nullptr;
-    callback_fnc cb;
+    T& cb;
 };
 
 class _CycleHandler
@@ -23,7 +22,7 @@ class _CycleHandler
 public:
     _CycleHandler();
 
-    void add(callback_fnc cb);
+    QueueItem* add(Functor& cb);
 
     void run();
     void clear();

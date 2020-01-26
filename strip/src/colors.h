@@ -10,16 +10,14 @@ class ColorPin
 public:
     ColorPin(uint8_t pin);
 
-    void show();
     void set_signal(uint8_t sig);
+    void show();
 
-    bool move_towards(uint8_t sig);
+    QueueItem* move_towards(uint8_t sig);
 
     uint8_t get_signal();
 
 protected:
-    CallbackStatus cycle_show();
-
     uint8_t m_pin;
     uint8_t m_signal;
 };
