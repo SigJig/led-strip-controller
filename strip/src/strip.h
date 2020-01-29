@@ -5,21 +5,33 @@
 #include "colors.h"
 #include "cyclehandler.h"
 
+class StripShowAction : public Action
+{
+public:
+    StripShowAction(Strip* strip);
+
+    CallbackStatus call();
+
+protected:
+    Strip* m_strip;
+};
+
 class Strip
 {
 public:
     Strip(ColorPin* pins);
 
-    bool move_towards(double* colors);
+    void move_towards(double* colors);
 
     void show();
+    void hide();
     void clear();
 
 protected:
     ColorPin* m_pins;
 
     bool m_shown;
-    QueueItem* m_queue_item;
+    friend class StripShowAction;
 
     static const uint8_t num_pins = 3;
 };

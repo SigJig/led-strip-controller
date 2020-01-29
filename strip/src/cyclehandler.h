@@ -3,6 +3,10 @@
 #define CYCLEHANDLER_H
 
 #include <Arduino.h>
+#include <vector>
+#include <memory>
+
+#include "cyclehandler.h"
 
 enum CallbackStatus : uint8_t
 {
@@ -11,10 +15,9 @@ enum CallbackStatus : uint8_t
     REPEAT = 0x02,
 };
 
-struct QueueItem
+class Action
 {
-    QueueItem* next, * last = nullptr;
-    std::function<CallbackStatus()> cb;
+    virtual CallbackStatus call() = 0;
 };
 
 class _CycleHandler
@@ -22,17 +25,17 @@ class _CycleHandler
 public:
     _CycleHandler();
 
-    QueueItem* add(std::function<CallbackStatus()> cb);
+    void add(Action* action); // TODO: Return iterator pointer
 
-    bool queue_remove(QueueItem* qi);
+    bool queue_remove(Action* qi); // TODO: Take iterator pointer instead
 
     void run();
     void clear();
 
 protected:
-    void process_callback(QueueItem* qi);
+    void process_callback(Action* qi); // TODO: Might just directly call the action method instead
 
-    QueueItem* m_queue;
+    std::vector<std::unique_ptr<Action>> m_queue;
 };
 
 extern _CycleHandler cycle_handler;
