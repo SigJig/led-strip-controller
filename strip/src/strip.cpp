@@ -1,24 +1,18 @@
 
 #include "strip.h"
 
-StripShowAction::StripShowAction(Strip* strip)
-    : m_strip(strip)
+Strip::Strip(ColorPin* pins)
+    : m_pins(pins), m_shown(true)
 {  }
 
-CallbackStatus StripShowAction::call()
+CallbackStatus Strip::call()
 {
-    for (uint8_t i = 0; i < m_strip->num_pins; i++)
+    for (uint8_t i = 0; i < num_pins; i++)
     {
-        m_strip->m_pins[i].show(!m_strip->m_shown);
+        m_pins[i].show(!m_shown);
     }
 
     return REPEAT;
-}
-
-Strip::Strip(ColorPin* pins)
-    : m_pins(pins), m_shown(true)
-{
-    cycle_handler.add(new StripShowAction(this));
 }
 
 void Strip::show()

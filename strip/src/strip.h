@@ -5,21 +5,12 @@
 #include "colors.h"
 #include "cyclehandler.h"
 
-class StripShowAction : public Action
-{
-public:
-    StripShowAction(Strip* strip);
-
-    CallbackStatus call();
-
-protected:
-    Strip* m_strip;
-};
-
-class Strip
+class Strip : public Action
 {
 public:
     Strip(ColorPin* pins);
+
+    CallbackStatus call();
 
     void move_towards(double* colors);
 
