@@ -3,7 +3,9 @@
 
 Strip::Strip(ColorPin* pins)
     : m_pins(pins), m_shown(true)
-{  }
+{
+    cycle_handler.add(this);
+}
 
 CallbackStatus Strip::call()
 {
