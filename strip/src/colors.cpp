@@ -1,7 +1,6 @@
 
 #include "colors.h"
-#include <cmath>
-#include <algorithm>
+#include <math.h>
 
 PinFadeAction::PinFadeAction(ColorPin* pin, uint8_t to)
     : m_pin(pin), m_to(to) {  }
@@ -17,7 +16,7 @@ CallbackStatus PinFadeAction::call()
     return REPEAT;
 }
 
-ColorPin::ColorPin(uint8_t pin) : m_pin(pin), m_signal(0), m_action(nullptr)
+ColorPin::ColorPin(uint8_t pin) : m_pin(pin), m_signal(0), m_queue_item(nullptr)
 {
     pinMode(m_pin, OUTPUT);
 }
@@ -32,11 +31,13 @@ void ColorPin::show(bool dead)
     analogWrite(m_pin, dead ? 0 : m_signal);
 }
 
-void ColorPin::move_towards(uint8_t to)
+QueueItem* ColorPin::move_towards(uint8_t to)
 {
-    if (m_action != nullptr) cycle_handler.queue_remove(m_action);
+    if (m_queue_item != nullptr) cycle_handler.queue_remove(m_queue_item);
 
-    return cycle_handler.add(new PinFadeAction(this, to));
+    m_queue_item = cycle_handler.add(new PinFadeAction(this, to));
+
+    return m_queue_item;
 }
 
 uint8_t ColorPin::get_signal()
@@ -48,8 +49,8 @@ RGB hsv_rgb(uint16_t hue, uint8_t sat, uint8_t val)
 {
     auto f = [&](uint8_t n)
     {
-      double k = std::fmod(n + hue / 60.0, 6);
-      return (val - val * sat * std::max(std::min(std::min(k, 4 - k), 1.0), 0.0)) * 255;
+      double k = fmod(n + hue / 60.0, 6);
+      return (val - val * sat * max(min(min(k, 4 - k), 1.0), 0.0)) * 255;
     };
 
     return {f(5), f(3), f(1)};

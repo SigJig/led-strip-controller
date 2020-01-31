@@ -22,7 +22,6 @@ protected:
     ColorPin* m_pins;
 
     bool m_shown;
-    friend class StripShowAction;
 
     static const uint8_t num_pins = 3;
 };

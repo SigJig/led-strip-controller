@@ -6,7 +6,6 @@
 #include "../config.h"
 
 #define BAUD_RATE 9600
-#define ETL_NO_STL
 
 const char* ssid = NETWORK_SSID;
 const char* password = NETWORK_PASS;
@@ -38,5 +37,17 @@ void setup()
 
 void loop()
 {
+    static bool is_red = false;
+
+    if (millis() % 4000)
+    {
+      auto rgb = (is_red ? RGB({0, 170, 255}) : RGB({240, 0, 0}));
+
+      is_red = !is_red;
+
+      for (uint8_t i = 0; i < 2; i++) strips[i].commit_rgb(rgb);
+    }
+
     cycle_handler.run();
+    delay(1);
 }

@@ -13,9 +13,9 @@ public:
     CallbackStatus call();
 
 protected:
-    uint8_t m_to;
-
     ColorPin* m_pin;
+
+    uint8_t m_to;
 };
 
 class ColorPin
@@ -26,7 +26,7 @@ public:
     void set_signal(uint8_t sig);
     void show(bool dead = false);
 
-    void move_towards(uint8_t sig);
+    QueueItem* move_towards(uint8_t sig);
 
     uint8_t get_signal();
 
@@ -34,7 +34,7 @@ protected:
     uint8_t m_pin;
     uint8_t m_signal;
 
-    Action* m_action;
+    QueueItem* m_queue_item;
 
     friend class PinFadeAction;
 };
