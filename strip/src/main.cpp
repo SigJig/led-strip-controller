@@ -41,6 +41,7 @@ void loop()
 
     if (millis() % 4000)
     {
+      Serial.println("Intializing change");
       auto rgb = (is_red ? RGB({0, 170, 255}) : RGB({240, 0, 0}));
 
       is_red = !is_red;

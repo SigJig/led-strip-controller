@@ -5,19 +5,6 @@
 
 #include "cyclehandler.h"
 
-class PinFadeAction : public Action
-{
-public:
-    PinFadeAction(ColorPin* pin, uint8_t to);
-
-    CallbackStatus call();
-
-protected:
-    ColorPin* m_pin;
-
-    uint8_t m_to;
-};
-
 class ColorPin
 {
 public:
@@ -37,6 +24,19 @@ protected:
     QueueItem* m_queue_item;
 
     friend class PinFadeAction;
+};
+
+class PinFadeAction : public Action
+{
+public:
+    PinFadeAction(ColorPin* pin, uint8_t to);
+
+    CallbackStatus call();
+
+protected:
+    ColorPin* m_pin;
+
+    uint8_t m_to;
 };
 
 struct RGB { double r, g, b; };
