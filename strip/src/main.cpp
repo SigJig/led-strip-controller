@@ -50,7 +50,7 @@ void loop()
     static bool is_red = false;
     static uint8_t iteration = 0;
 
-    if (millis() % 4000)
+    if (millis() % 4000 == 0)
     {
         Serial.println("Intializing change");
         auto rgb = (is_red ? RGB({0, 170, 255}) : RGB({240, 0, 0}));

@@ -20,8 +20,10 @@ enum CallbackStatus : uint8_t
 class Action
 {
 public:
+    virtual ~Action();
+
     // Not using virtual as that requires extra memory
-    CallbackStatus call();
+    virtual CallbackStatus call();
 };
 
 /**

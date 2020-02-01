@@ -13,6 +13,8 @@ CallbackStatus Action::call()
     return ERROR;
 }
 
+Action::~Action() {  }
+
 QueueItem::QueueItem() {  }
 
 QueueItem::~QueueItem()
