@@ -123,7 +123,7 @@ void _CycleHandler::free(QueueItem* item)
 
     if (index < size)
     {
-        m_free_map &= ~(1 << index);
+        m_free_map &= ~(0x01 << index);
     }
     else
     {
