@@ -1,8 +1,16 @@
 
 #include "strip.h"
 
-Strip::Strip(ColorPin* pins)
+Strip::Strip(ColorPin* pins, bool _init)
     : m_pins(pins), m_shown(true)
+{
+    if (_init)
+    {
+        init();
+    }
+}
+
+void Strip::init()
 {
     cycle_handler.add(this);
 }

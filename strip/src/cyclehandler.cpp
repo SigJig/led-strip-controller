@@ -24,10 +24,13 @@ QueueItem::~QueueItem()
 
 bool QueueItem::add(Action* action)
 {
+    Serial.print("Adding action... ");
     if (!(is_free() && cycle_handler.occupy(this)))
     {
         return false;
     }
+
+    Serial.println("Added! ");
 
     m_ptr = action;
 
@@ -167,12 +170,9 @@ void _CycleHandler::clear()
 
 QueueItem* _CycleHandler::next_free()
 {
-    if (m_free_map)
+    for (uint8_t i = 0; i < size; i++)
     {
-        for (uint8_t i = 0; i < size; i++)
-        {
-            if ((m_free_map >> i) & 0x01) return &m_queue[i];
-        }
+        if (((m_free_map >> i) & 0x01) == 0) return &m_queue[i];
     }
 
     return nullptr;

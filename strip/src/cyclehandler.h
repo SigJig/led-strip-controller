@@ -79,7 +79,6 @@ protected:
     uint8_t get_index(QueueItem* item);
 
     QueueItem* next_free();
-
     map_size_t m_free_map;
 
     QueueItem m_queue[QUEUE_MAX_SIZE];

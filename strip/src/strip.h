@@ -8,7 +8,9 @@
 class Strip : public Action
 {
 public:
-    Strip(ColorPin* pins);
+    Strip(ColorPin* pins, bool _init = true);
+
+    void init();
 
     CallbackStatus call();
 
