@@ -21,8 +21,6 @@ class Action
 {
 public:
     virtual ~Action();
-
-    // Not using virtual as that requires extra memory
     virtual CallbackStatus call();
 };
 
