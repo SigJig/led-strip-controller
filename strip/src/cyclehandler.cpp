@@ -80,6 +80,8 @@ void _CycleHandler::queue_remove(QueueItem* item)
 
 void _CycleHandler::process_callback(QueueItem* item)
 {
+    if (item->is_free()) return;
+
     CallbackStatus ret = (*item)->call();
 
     if (ret & ERROR)
