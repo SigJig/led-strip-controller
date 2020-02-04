@@ -8,7 +8,6 @@ PinFadeAction::PinFadeAction(ColorPin* pin, uint8_t to)
 CallbackStatus PinFadeAction::call()
 {
     auto signal = m_pin->get_signal();
-    Serial.println("Moving " + String(signal));
 
     if (m_to == signal) return SUCCESS;
 

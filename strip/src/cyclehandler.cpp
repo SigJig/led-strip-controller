@@ -23,13 +23,10 @@ QueueItem::~QueueItem()
 
 bool QueueItem::add(Action* action)
 {
-    Serial.println("Adding action... ");
     if (!(is_free() && cycle_handler.occupy(this)))
     {
         return false;
     }
-
-    Serial.println("Added! ");
 
     m_ptr = action;
 
@@ -67,7 +64,6 @@ _CycleHandler::_CycleHandler()
 QueueItem* _CycleHandler::add(Action* action)
 {
     auto i = next_free();
-    Serial.println("Adding item to index " + String(get_index(i)));
 
     if (i == nullptr)
     {
