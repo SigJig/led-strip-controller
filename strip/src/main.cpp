@@ -50,9 +50,9 @@ void loop()
 {
     static bool is_red = false;
 
-    if (millis() % 4000 == 0)
+    if (millis() % (is_red ? 500 : 10000) == 0)
     {
-        auto rgb = (is_red ? RGB({0, 170, 255}) : RGB({240, 0, 0}));
+        auto rgb = (is_red ? RGB({255, 255, 255}) : RGB({28, 240, 17}));
 
         is_red = !is_red;
         

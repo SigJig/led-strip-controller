@@ -34,6 +34,7 @@ public:
     using Strip::Strip;
 
     void commit_rgb(RGB rgb);
+    void commit_hsv(uint16_t hue, double sat, double val);
 
     void set_rgb(RGB rgb);
     void set_hsv(uint16_t hue, double sat, double val);
@@ -48,6 +49,7 @@ public:
     using RGBStrip::RGBStrip;
 
     void commit_rgbw(RGBW rgbw);
+    void commit_hsv(uint16_t hue, double sat, double val);
 
     void set_rgbw(RGBW rgbw);
     void set_hsv(uint16_t hue, double sat, double val);

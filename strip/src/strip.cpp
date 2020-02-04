@@ -69,6 +69,13 @@ void RGBStrip::commit_rgb(RGB rgb)
     return move_towards(colors);
 }
 
+void RGBStrip::commit_hsv(uint16_t hue, double sat, double val)
+{
+    RGB rgb = hsv_rgb(hue, sat, val);
+
+    return commit_rgb(rgb);
+}
+
 void RGBWStrip::set_hsv(uint16_t hue, double sat, double value)
 {
     RGB rgb = hsv_rgb(hue, sat, value);
