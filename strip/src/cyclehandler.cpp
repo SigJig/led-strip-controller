@@ -12,7 +12,6 @@ CallbackStatus Action::call()
 
     return ERROR;
 }
-
 Action::~Action() {  }
 
 QueueItem::QueueItem() {  }
@@ -24,7 +23,7 @@ QueueItem::~QueueItem()
 
 bool QueueItem::add(Action* action)
 {
-    Serial.print("Adding action... ");
+    Serial.println("Adding action... ");
     if (!(is_free() && cycle_handler.occupy(this)))
     {
         return false;
@@ -47,6 +46,8 @@ void QueueItem::destroy()
 {
     cycle_handler.free(this);
     delete m_ptr;
+
+    m_ptr = nullptr;
 }
 
 Action& QueueItem::operator*() const
@@ -66,6 +67,8 @@ _CycleHandler::_CycleHandler()
 QueueItem* _CycleHandler::add(Action* action)
 {
     auto i = next_free();
+    Serial.println("Adding item to index " + String(get_index(i)));
+
     if (i == nullptr)
     {
         return nullptr;
@@ -106,20 +109,6 @@ uint8_t _CycleHandler::get_index(QueueItem* item)
     }
 
     uint8_t index = item - m_queue;
-
-    if (index)
-    {
-        size_t queue_size = sizeof(QueueItem);
-
-        if (index % queue_size != 0)
-        {
-            // TODO: Error
-
-            return size;
-        }
-
-        index /= queue_size;
-    }
 
     return index;
 }
@@ -172,7 +161,7 @@ QueueItem* _CycleHandler::next_free()
 {
     for (uint8_t i = 0; i < size; i++)
     {
-        if (((m_free_map >> i) & 0x01) == 0) return &m_queue[i];
+        if (((m_free_map >> i) & 0x01) == 0) return &(m_queue[i]);
     }
 
     return nullptr;
