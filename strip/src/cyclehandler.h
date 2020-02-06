@@ -50,7 +50,9 @@ class _CycleHandler
 {
 public:
     typedef
-#if QUEUE_MAX_SIZE > 32
+#if QUEUE_MAX_SIZE > 64
+    uint128_t
+#elif QUEUE_MAX_SIZE > 32
     uint64_t
 #elif QUEUE_MAX_SIZE > 16
     uint32_t
