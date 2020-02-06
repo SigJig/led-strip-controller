@@ -155,9 +155,13 @@ void _CycleHandler::clear()
 
 QueueItem* _CycleHandler::next_free()
 {
-    for (uint8_t i = 0; i < size; i++)
+    auto map = m_free_map;
+
+    for (uint8_t i = 0; ; i++)
     {
-        if (((m_free_map >> i) & 0x01) == 0) return &(m_queue[i]);
+        if ((map & 0x01) == 0) return &(m_queue[i]);
+
+        map >>= 1;
     }
 
     return nullptr;
