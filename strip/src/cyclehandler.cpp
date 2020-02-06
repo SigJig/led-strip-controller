@@ -157,7 +157,7 @@ QueueItem* _CycleHandler::next_free()
 {
     auto map = m_free_map;
 
-    for (uint8_t i = 0; ; i++)
+    for (uint8_t i = 0; i < size; i++)
     {
         if ((map & 0x01) == 0) return &(m_queue[i]);
 
