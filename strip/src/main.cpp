@@ -3,7 +3,7 @@
 #include <SPI.h>
 #include <WiFiNINA.h>
 
-#include "../config.h"
+#include <config.h>
 
 #define BAUD_RATE 9600
 

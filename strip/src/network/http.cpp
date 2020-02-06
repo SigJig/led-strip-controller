@@ -1,21 +1,16 @@
 
-#include "../../config.h"
+#include <config.h>
 #include "http.h"
 
 HTTP::Server::Server(uint16_t port)
     : m_server(WiFiServer(port))
 {  }
 
-void HTTP::Server::run()
-{
-    while (true) process();
-}
-
-bool HTTP::Server::process()
+void HTTP::Server::process()
 {
     auto client = m_server.available();
     
-    if (!client) return false;
+    if (!client) return;
 
     auto request = Request(client);
     auto response = Response(client);
@@ -34,8 +29,6 @@ bool HTTP::Server::process()
     }
 
     client.stop();
-
-    return true;
 }
 
 HTTP::Request::Request(WiFiClient& client)

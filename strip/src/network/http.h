@@ -13,9 +13,7 @@ namespace HTTP
     public:
         Server(uint16_t port);
 
-        void run();
-        
-        bool process();
+        void process();
 
     protected:
         WiFiServer m_server;
