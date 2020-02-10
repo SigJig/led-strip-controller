@@ -15,7 +15,7 @@ enum PacketCode : uint8_t {
     FADE = 0b100
 };
 
-void process_message(char* topic, byte* payload, unsigned int length);
+//void process_message(char* topic, byte* payload, unsigned int length);
 
 extern PubSubClient mqtt_client;
 

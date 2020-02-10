@@ -34,8 +34,22 @@ void setup()
 
 void loop()
 {
-    mqtt_client.loop();
-    cycle_handler.run();
+    if (!mqtt_client.connected())
+    {
+        if (mqtt_client.connect("chiefdog"))
+        {
+            mqtt_client.publish("output", "Connected");
+            mqtt_client.subscribe("strips/1");
+        }
+        delay(5000);
+    }
+    else
+    {
+        mqtt_client.loop();
+        cycle_handler.run();
+
+        delay(1);
+    }
     
-    delay(1);
+    
 }

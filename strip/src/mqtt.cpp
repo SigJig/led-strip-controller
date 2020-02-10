@@ -3,7 +3,18 @@
 #include "cyclehandler.h"
 #include "colors.h"
 
-PubSubClient mqtt_client;
+static void callback(char* topic, byte* payload, unsigned int length)
+{
+    mqtt_client.publish("output", String("Recieved: [ " + String(topic) + " ] - " + String((char*)payload)).c_str());
+}
+
+const char* mqtt_host = MQTT_HOST;
+uint16_t mqtt_port = MQTT_PORT;
+
+WiFiClient client;
+
+PubSubClient mqtt_client(mqtt_host, mqtt_port, callback, client);
+
 /*
 static String get_until(String str, char delim)
 {
@@ -90,6 +101,3 @@ void process_message(char* topic, byte* payload, unsigned int length)
     return handle_call(digit_str.toInt(), payload, length);
 }
 */
-
-mqtt_client.setServer(MQTT_HOST, MQTT_PORT);
-mqtt_client.subscribe("strips/1");
