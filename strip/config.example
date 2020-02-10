@@ -7,4 +7,6 @@
 #define NETWORK_SSID "network-ssid"
 #define NETWORK_PASS "network-password"
 
+#define MQTT_HOST "localhost"
+
 #endif // CONFIG_H
