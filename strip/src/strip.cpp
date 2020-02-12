@@ -1,6 +1,10 @@
 
 #include "strip.h"
 
+
+ColorPin pins[] = {3, 5, 6};
+RGBStrip strip(pins, false);
+
 Strip::Strip(ColorPin* pins, bool _init)
     : m_pins(pins), m_shown(true)
 {
@@ -56,10 +60,10 @@ void RGBStrip::set_rgb(RGB rgb)
     m_pins[2].set_signal(rgb.b);
 }
 
-void RGBStrip::set_hsv(uint16_t hue, double sat, double value)
+void RGBStrip::set_hsv(HSV hsv)
 {   
     clear();
-    set_rgb(hsv_rgb(hue, sat, value));
+    set_rgb(hsv_rgb(hsv));
 }
 
 void RGBStrip::commit_rgb(RGB rgb)
@@ -69,18 +73,18 @@ void RGBStrip::commit_rgb(RGB rgb)
     return move_towards(colors);
 }
 
-void RGBStrip::commit_hsv(uint16_t hue, double sat, double val)
+void RGBStrip::commit_hsv(HSV hsv)
 {
-    RGB rgb = hsv_rgb(hue, sat, val);
+    RGB rgb = hsv_rgb(hsv);
 
     return commit_rgb(rgb);
 }
 
-void RGBWStrip::set_hsv(uint16_t hue, double sat, double value)
+void RGBWStrip::set_hsv(HSV hsv)
 {
-    RGB rgb = hsv_rgb(hue, sat, value);
+    RGB rgb = hsv_rgb(hsv);
 
-    set_rgbw({rgb.r, rgb.g, rgb.b, (1.0 - value) * 255.0});
+    set_rgbw({rgb.r, rgb.g, rgb.b, (1.0 - hsv.val) * 255.0});
 }
 
 void RGBWStrip::set_rgbw(RGBW rgbw)

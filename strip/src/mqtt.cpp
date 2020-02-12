@@ -2,102 +2,102 @@
 #include "mqtt.h"
 #include "cyclehandler.h"
 #include "colors.h"
-
-static void callback(char* topic, byte* payload, unsigned int length)
-{
-    mqtt_client.publish("output", String("Recieved: [ " + String(topic) + " ] - " + String((char*)payload)).c_str());
-}
+#include "strip.h"
 
 const char* mqtt_host = MQTT_HOST;
 uint16_t mqtt_port = MQTT_PORT;
 
 WiFiClient client;
+PubSubClient mqtt_client(mqtt_host, mqtt_port, mqtt_callback, client);
 
-PubSubClient mqtt_client(mqtt_host, mqtt_port, callback, client);
-
-/*
-static String get_until(String str, char delim)
+template<typename Functor>
+String scan_func(String& str, Functor f)
 {
     String ret;
+    uint8_t i = 0;
 
-    for (uint8_t i = 0; i < str.length(); i++)
+    for (; i < str.length(); i++)
     {
-        if (str[i] == delim) break;
+        char c = str[i];
 
-        ret += ret[i];
+        if (f(c))
+        {
+            break;
+        }
+
+        ret += c;
     }
+
+    str.remove(0, i);
 
     return ret;
 }
 
-static void handle_call(uint8_t index, byte* payload, unsigned int length)
+String scan_delim(String& str, char delim)
 {
-    if (index >= NUM_STRIPS) return;
+    return scan_func(str, [&delim](char c){ return c == delim; });
+}
 
-    String current;
+template<typename T>
+T* extract_values(String& str, T* arr, uint8_t length)
+{
+    for (uint8_t i = 0; i < length; i++)
+    {
+        String val = scan_delim(str, '-');
 
-    String instructions[2] = {""};
-    uint8_t instr_idx = 0;
+        if (!val)
+        {
+            // TODO: Error
+        }
+
+        arr[i] = val.toInt();
+    }
+
+    return arr;
+}
+
+void process_instruction(PacketCode code, String args)
+{
+    String mode = scan_delim(args, '-');
+    mode.toLowerCase();
+
+    if (mode == "rgb")
+    {
+        double values[3];
+        extract_values(args, values, 3);
+
+        RGB rgb = {values[0], values[1], values[2]};
+        strip.commit_rgb(rgb);
+    }
+    else if (mode == "hsv")
+    {
+        double values[3];
+        extract_values(args, values, 3);
+
+        HSV hsv = {values[0], values[1], values[2]};
+        strip.commit_hsv(hsv);
+    }
+    else
+    {
+        // TODO: Error
+    }
+}
+
+void parse_message(byte* message, unsigned int length)
+{
+    String instruction, message_str;
 
     for (unsigned int i = 0; i < length; i++)
     {
-        byte c = payload[i];
-
-        if (isSpace(c))
-        {
-            instructions[instr_idx] = current;
-            instr_idx++;
-        }
-        else
-        {
-            current += c;
-        }
+        message_str += message[i];
     }
 
-    PacketCode code = (PacketCode) instructions[0].toInt();
-    
-    if (!code)
-    {
-        Serial.println("Invalid code recieved!");
-    }
+    instruction = scan_func(message_str, [](char c){ return isspace(c); });
 
-    String type = get_until(instructions[1], '-').toLowerCase();
-
-    instructions[1] = instructions[1].substring(type.length());
-
-    bool is_fade = code & FADE;
-
-    if (type == "rgb")
-    {
-
-    }
-    else if (type == "rgbw")
-    {
-
-    }
-    else if (type == "hsv")
-    {
-
-    }
+    return process_instruction((PacketCode)instruction.toInt(), message_str);
 }
 
-void process_message(char* topic, byte* payload, unsigned int length)
+void mqtt_callback(char* topic, byte* payload, unsigned int length)
 {
-    auto topic_str = String(topic);
-    String digit_str;
-
-    for (uint8_t i = 0; i < topic_str.length(); i++)
-    {
-        char c = topic_str[i];
-
-        if (c == '/') break;
-
-        if (isDigit(c))
-        {
-            digit_str += c;
-        }
-    }
-
-    return handle_call(digit_str.toInt(), payload, length);
+    parse_message(payload, length);
 }
-*/

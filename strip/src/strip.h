@@ -34,10 +34,10 @@ public:
     using Strip::Strip;
 
     void commit_rgb(RGB rgb);
-    void commit_hsv(uint16_t hue, double sat, double val);
+    void commit_hsv(HSV hsv);
 
     void set_rgb(RGB rgb);
-    void set_hsv(uint16_t hue, double sat, double val);
+    void set_hsv(HSV hsv);
 
 protected:
     static const uint8_t num_pins = 3;
@@ -49,13 +49,15 @@ public:
     using RGBStrip::RGBStrip;
 
     void commit_rgbw(RGBW rgbw);
-    void commit_hsv(uint16_t hue, double sat, double val);
+    void commit_hsv(HSV hsv);
 
     void set_rgbw(RGBW rgbw);
-    void set_hsv(uint16_t hue, double sat, double val);
+    void set_hsv(HSV hsv);
 
 protected:
     static const uint8_t num_pins = 4;
 };
+
+extern RGBStrip strip;
 
 #endif // STRIP_H

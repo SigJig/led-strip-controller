@@ -42,6 +42,8 @@ protected:
 struct RGB { double r, g, b; };
 struct RGBW { double r, g, b, w; };
 
-RGB hsv_rgb(uint16_t hue, uint8_t sat, uint8_t val);
+struct HSV { double hue, sat, val; };
+
+RGB hsv_rgb(HSV hsv);
 
 #endif // COLORS_H

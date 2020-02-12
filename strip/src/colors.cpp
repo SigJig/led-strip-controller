@@ -45,12 +45,12 @@ uint8_t ColorPin::get_signal()
     return m_signal;
 }
 
-RGB hsv_rgb(uint16_t hue, uint8_t sat, uint8_t val)
+RGB hsv_rgb(HSV hsv)
 {
     auto f = [&](uint8_t n)
     {
-      double k = fmod(n + hue / 60.0, 6);
-      return (val - val * sat * max(min(min(k, 4 - k), 1.0), 0.0)) * 255;
+      double k = fmod(n + hsv.hue / 60.0, 6);
+      return (hsv.val - hsv.val * hsv.sat * max(min(min(k, 4 - k), 1.0), 0.0)) * 255;
     };
 
     return {f(5), f(3), f(1)};

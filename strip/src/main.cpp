@@ -9,9 +9,6 @@
 #include "cyclehandler.h"
 #include "wifi.h"
 
-ColorPin pins[] = {3, 5, 6};
-RGBStrip strip(pins, false);
-
 uint8_t led_pins[] = {9, 10, 11};
 
 void led_write(uint8_t bytes)
@@ -36,7 +33,7 @@ void loop()
 {
     if (!mqtt_client.connected())
     {
-        if (mqtt_client.connect("chiefdog"))
+        if (mqtt_client.connect("arduino-strips"))
         {
             mqtt_client.publish("output", "Connected");
             mqtt_client.subscribe("strips/1");

@@ -15,7 +15,17 @@ enum PacketCode : uint8_t {
     FADE = 0b100
 };
 
-//void process_message(char* topic, byte* payload, unsigned int length);
+template<typename Functor>
+String scan_func(String& str, Functor f);
+
+String scan_delim(String& str, char delim);
+
+template<typename T>
+T* extract_values(String& str, T* arr, uint8_t length);
+
+void mqtt_callback(char* topic, byte* message, unsigned int length);
+void process_instruction(PacketCode code, String args);
+void parse_message(byte* message, unsigned int length);
 
 extern PubSubClient mqtt_client;
 
