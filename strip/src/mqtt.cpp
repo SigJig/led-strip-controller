@@ -28,7 +28,7 @@ String scan_func(String& str, Functor f)
         ret += c;
     }
 
-    str.remove(0, i);
+    str.remove(0, i + 1);
 
     return ret;
 }
@@ -89,7 +89,8 @@ void parse_message(byte* message, unsigned int length)
 
     for (unsigned int i = 0; i < length; i++)
     {
-        message_str += message[i];
+        char m = message[i];
+        message_str += m;
     }
 
     instruction = scan_func(message_str, [](char c){ return isspace(c); });
