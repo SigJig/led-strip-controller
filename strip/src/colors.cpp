@@ -2,26 +2,12 @@
 #include "colors.h"
 #include <math.h>
 
-PinFadeAction::PinFadeAction(ColorPin* pin, uint8_t to)
-    : m_pin(pin), m_to(to) {  }
-
-CallbackStatus PinFadeAction::call()
-{
-    auto signal = m_pin->get_signal();
-
-    if (m_to == signal) return SUCCESS;
-
-    m_pin->set_signal(signal + ((m_to > signal) ? 1 : -1));
-
-    return REPEAT;
-}
-
 ColorPin::ColorPin(uint8_t pin) : m_pin(pin), m_signal(0), m_queue_item(nullptr)
 {
     pinMode(m_pin, OUTPUT);
 }
 
-void ColorPin::set_signal(uint8_t sig)
+void ColorPin::set_signal(double sig)
 {
     m_signal = sig;
 }
@@ -31,18 +17,48 @@ void ColorPin::show(bool dead)
     analogWrite(m_pin, dead ? 0 : m_signal);
 }
 
-QueueItem* ColorPin::move_towards(uint8_t to)
+bool ColorPin::move_towards(double sig)
 {
-    if (m_queue_item != nullptr) cycle_handler.queue_remove(m_queue_item);
+    if (sig == m_signal) return false;
 
-    m_queue_item = cycle_handler.add(new PinFadeAction(this, to));
+    set_signal(m_signal + (sig > m_signal) ? 1 : -1);
 
-    return m_queue_item;
+    return true;
 }
 
-uint8_t ColorPin::get_signal()
+double ColorPin::get_signal()
 {
     return m_signal;
+}
+
+double* RGB::to_list(double* arr)
+{
+    arr[0] = r;
+    arr[1] = g;
+    arr[2] = b;
+
+    return arr;
+}
+
+double* RGBW::to_list(double* arr)
+{
+    arr[0] = r;
+    arr[1] = g;
+    arr[2] = b;
+    arr[3] = w;
+
+    return arr;
+}
+
+double* HSV::to_list(double* arr)
+{
+    RGB rgb = hsv_rgb(*this);
+
+    arr[0] = rgb.r;
+    arr[1] = rgb.g;
+    arr[2] = rgb.b;
+
+    return arr;
 }
 
 RGB hsv_rgb(HSV hsv)

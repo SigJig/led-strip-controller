@@ -36,7 +36,7 @@ void loop()
         if (mqtt_client.connect("arduino-strips"))
         {
             mqtt_client.publish("output", "Connected");
-            mqtt_client.subscribe("strips/1");
+            mqtt_client.subscribe("strips/+");
         }
         delay(5000);
     }

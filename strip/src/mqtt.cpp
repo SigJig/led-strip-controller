@@ -35,7 +35,7 @@ String scan_func(String& str, Functor f)
 
 String scan_delim(String& str, char delim)
 {
-    return scan_func(str, [&delim](char c){ return c == delim; });
+    return scan_func(str, [&delim](char c) { return c == delim; });
 }
 
 template<typename T>
@@ -50,7 +50,7 @@ T* extract_values(String& str, T* arr, uint8_t length)
             // TODO: Error
         }
 
-        arr[i] = val.toInt();
+        arr[i] = val.toDouble();
     }
 
     return arr;
@@ -58,29 +58,39 @@ T* extract_values(String& str, T* arr, uint8_t length)
 
 void process_instruction(PacketCode code, String args)
 {
+    if (code & OFF)
+    {
+        strip.show(false);
+
+        return;
+    }
+    else if (code & ON)
+    {
+        strip.show(true);
+    }
+
     String mode = scan_delim(args, '-');
     mode.toLowerCase();
 
     if (mode == "rgb")
     {
         double values[3];
-        extract_values(args, values, 3);
-
-        RGB rgb = {values[0], values[1], values[2]};
-        strip.commit_rgb(rgb);
+        strip.set_signals(extract_values(args, values, 3));
     }
     else if (mode == "hsv")
     {
         double values[3];
         extract_values(args, values, 3);
 
-        HSV hsv = {values[0], values[1], values[2]};
-        strip.commit_hsv(hsv);
+        strip.set_hsv({values[0], values[1], values[2]});
     }
     else
     {
         // TODO: Error
     }
+
+    strip.commit(code & FADE);
+
 }
 
 void parse_message(byte* message, unsigned int length)

@@ -5,6 +5,32 @@
 #include "colors.h"
 #include "cyclehandler.h"
 
+template<size_t size>
+class StripColorHandler : public Action
+{
+public:
+    StripColorHandler(ColorPin pins[size], uint8_t length);
+    StripColorHandler(ColorPin pins[size], double colors[size], uint8_t length);
+
+    void set(double colors[size]);
+    void on_remove();
+
+    QueueItem* run(bool fade = false);
+
+    CallbackStatus on_call();
+
+protected:
+    void remove();
+
+    ColorPin m_pins[size];
+    double m_colors[size];
+
+    QueueItem* m_queue_item;
+
+    uint8_t m_size = size;
+};
+
+template<size_t size>
 class Strip : public Action
 {
 public:
@@ -12,52 +38,44 @@ public:
 
     void init();
 
-    CallbackStatus call();
+    CallbackStatus on_call();
 
-    void move_towards(double* colors);
+    QueueItem* commit(bool fade = false);
 
-    void show();
-    void hide();
+    void show(bool show_ = true);
     void clear();
 
+    void set_signals(double* signals);
+
+    bool is_shown();
+
 protected:
-    ColorPin* m_pins;
+    ColorPin m_pins[size];
+    StripColorHandler<size> m_handler;
 
     bool m_shown;
-
-    static const uint8_t num_pins = 3;
+    size_t m_size = size;
 };
 
-class RGBStrip : public Strip
+template<size_t size>
+class RGBStrip : public Strip<size>
 {
 public:
     using Strip::Strip;
 
-    void commit_rgb(RGB rgb);
-    void commit_hsv(HSV hsv);
-
     void set_rgb(RGB rgb);
     void set_hsv(HSV hsv);
-
-protected:
-    static const uint8_t num_pins = 3;
 };
 
-class RGBWStrip : public RGBStrip
+template<size_t size>
+class RGBWStrip : public RGBStrip<size>
 {
 public:
     using RGBStrip::RGBStrip;
 
-    void commit_rgbw(RGBW rgbw);
-    void commit_hsv(HSV hsv);
-
     void set_rgbw(RGBW rgbw);
-    void set_hsv(HSV hsv);
-
-protected:
-    static const uint8_t num_pins = 4;
 };
 
-extern RGBStrip strip;
+extern RGBStrip<3> strip;
 
 #endif // STRIP_H

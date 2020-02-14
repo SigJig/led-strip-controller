@@ -10,39 +10,40 @@ class ColorPin
 public:
     ColorPin(uint8_t pin);
 
-    void set_signal(uint8_t sig);
+    void set_signal(double sig);
     void show(bool dead = false);
 
-    QueueItem* move_towards(uint8_t sig);
+    bool move_towards(double sig);
 
-    uint8_t get_signal();
+    double get_signal();
 
 protected:
     uint8_t m_pin;
-    uint8_t m_signal;
+    double m_signal;
 
     QueueItem* m_queue_item;
-
-    friend class PinFadeAction;
 };
 
-class PinFadeAction : public Action
+struct RGB
 {
-public:
-    PinFadeAction(ColorPin* pin, uint8_t to);
+    double r, g, b;
 
-    CallbackStatus call();
-
-protected:
-    ColorPin* m_pin;
-
-    uint8_t m_to;
+    double* to_list(double* arr);
 };
 
-struct RGB { double r, g, b; };
-struct RGBW { double r, g, b, w; };
+struct RGBW
+{
+    double r, g, b, w;
 
-struct HSV { double hue, sat, val; };
+    double* to_list(double* arr);
+};
+
+struct HSV
+{
+    double hue, sat, val;
+
+    double* to_list(double* arr);
+};
 
 RGB hsv_rgb(HSV hsv);
 

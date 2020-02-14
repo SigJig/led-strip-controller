@@ -5,7 +5,7 @@
 
 _CycleHandler cycle_handler;
 
-CallbackStatus Action::call()
+CallbackStatus Action::on_call()
 {
     // TODO: Throw error
     Serial.println("Base function called");
@@ -14,15 +14,20 @@ CallbackStatus Action::call()
 }
 Action::~Action() {  }
 
-QueueItem::QueueItem() {  }
+void Action::on_remove()
+{  }
+
+QueueItem::QueueItem() : m_is_dynamic(false) {  }
 
 QueueItem::~QueueItem()
 {
     destroy();
 }
 
-bool QueueItem::add(Action* action)
+bool QueueItem::add(Action* action, bool dynamic)
 {
+    m_is_dynamic = dynamic;
+
     if (!(is_free() && cycle_handler.occupy(this)))
     {
         return false;
@@ -42,7 +47,8 @@ bool QueueItem::is_free()
 void QueueItem::destroy()
 {
     cycle_handler.free(this);
-    delete m_ptr;
+
+    if (m_is_dynamic) delete m_ptr;
 
     m_ptr = nullptr;
 }
@@ -77,6 +83,7 @@ QueueItem* _CycleHandler::add(Action* action)
 
 void _CycleHandler::queue_remove(QueueItem* item)
 {
+    (*item)->on_remove();
     item->destroy();
 }
 
@@ -84,7 +91,7 @@ void _CycleHandler::process_callback(QueueItem* item)
 {
     if (item->is_free()) return;
 
-    CallbackStatus ret = (*item)->call();
+    CallbackStatus ret = (*item)->on_call();
 
     if (ret & ERROR)
     {

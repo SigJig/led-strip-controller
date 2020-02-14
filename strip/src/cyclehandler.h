@@ -21,7 +21,11 @@ class Action
 {
 public:
     virtual ~Action();
-    virtual CallbackStatus call();
+    virtual CallbackStatus on_call();
+
+    virtual void on_remove();
+
+    friend class _CycleHandler;
 };
 
 /**
@@ -35,7 +39,7 @@ public:
     ~QueueItem();
 
     bool is_free();
-    bool add(Action* action);
+    bool add(Action* action, bool dynamic = false);
     
     void destroy();
 
@@ -44,6 +48,8 @@ public:
 
 protected:
     Action* m_ptr;
+
+    bool m_is_dynamic;
 };
 
 class _CycleHandler

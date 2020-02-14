@@ -1,12 +1,77 @@
 
 #include "strip.h"
 
-
 ColorPin pins[] = {3, 5, 6};
-RGBStrip strip(pins, false);
 
-Strip::Strip(ColorPin* pins, bool _init)
-    : m_pins(pins), m_shown(true)
+RGBStrip<3> strip(pins, false);
+
+template<size_t size>
+StripColorHandler<size>::StripColorHandler(ColorPin pins[size])
+    : m_pins(pins), m_queue_item(nullptr)
+{  }
+
+template<size_t size>
+StripColorHandler<size>::StripColorHandler(ColorPin pins[size], double colors[size])
+    : m_pins(pins), m_queue_item(nullptr)
+{
+    set(colors);
+}
+
+template<size_t size>
+CallbackStatus StripColorHandler<size>::on_call()
+{
+    CallbackStatus status = SUCCESS;
+
+    for (uint8_t i = 0; i < m_size; i++)
+    {
+        if (!m_pins[i].move_towards(m_colors[i]))
+        {
+            status = REPEAT;
+        }
+    }
+
+    return status;
+}
+
+template<size_t size>
+void StripColorHandler<size>::set(double colors[size])
+{
+    m_colors = colors;
+}
+
+template<size_t size>
+void StripColorHandler<size>::on_remove()
+{
+    m_queue_item = nullptr;
+}
+
+template<size_t size>
+QueueItem* StripColorHandler<size>::run(bool fade)
+{
+    if (!fade)
+    {
+        for (uint8_t i = 0; i < m_size; i++)
+        {
+            m_pins[i].set_signal(m_colors[i]);
+        }
+
+        return nullptr;
+    }
+
+    if (m_queue_item != nullptr)
+    {
+        cycle_handler.queue_remove(m_queue_item);
+    }
+    
+    m_queue_item = cycle_handler.add(this);
+
+    return m_queue_item;
+
+}
+
+template<size_t size>
+Strip<size>::Strip(ColorPin pins[size], bool _init)
+    : m_pins(pins), m_handler(m_pins), m_shown(true)
 {
     if (_init)
     {
@@ -14,14 +79,16 @@ Strip::Strip(ColorPin* pins, bool _init)
     }
 }
 
-void Strip::init()
+template<size_t size>
+void Strip<size>::init()
 {
     cycle_handler.add(this);
 }
 
-CallbackStatus Strip::call()
+template<size_t size>
+CallbackStatus Strip<size>::on_call()
 {
-    for (uint8_t i = 0; i < num_pins; i++)
+    for (uint8_t i = 0; i < m_size; i++)
     {
         m_pins[i].show(!m_shown);
     }
@@ -29,74 +96,56 @@ CallbackStatus Strip::call()
     return REPEAT;
 }
 
-void Strip::show()
+template<size_t size>
+void Strip<size>::show(bool show_)
 {
-    m_shown = true;
+    m_shown = show_;
 }
 
-void Strip::hide()
+template<size_t size>
+void Strip<size>::clear()
 {
-    m_shown = false;
+    for (uint8_t i = 0; i < m_size; i++) m_pins[i].set_signal(0);
 }
 
-void Strip::clear()
+template<size_t size>
+void Strip<size>::set_signals(double* signals)
 {
-    for (uint8_t i = 0; i < num_pins; i++) m_pins[i].set_signal(0);
-}
-
-void Strip::move_towards(double* colors)
-{
-    for (uint8_t i = 0; i < num_pins; i++)
-    {
-        m_pins[i].move_towards(colors[i]);
-    }
-}
-
-void RGBStrip::set_rgb(RGB rgb)
-{   
     clear();
-    m_pins[0].set_signal(rgb.r);
-    m_pins[1].set_signal(rgb.g);
-    m_pins[2].set_signal(rgb.b);
+
+    m_handler.set(signals);
 }
 
-void RGBStrip::set_hsv(HSV hsv)
+template<size_t size>
+bool Strip<size>::is_shown()
+{
+    return m_shown;
+}
+
+template<size_t size>
+QueueItem* Strip<size>::commit(bool fade)
+{
+    return m_handler.run(fade);
+}
+
+template<size_t size>
+void RGBStrip<size>::set_rgb(RGB rgb)
 {   
-    clear();
+    double list[3];
+    
+    set_signals(rgb.to_list(list));
+}
+
+template<size_t size>
+void RGBStrip<size>::set_hsv(HSV hsv)
+{
     set_rgb(hsv_rgb(hsv));
 }
 
-void RGBStrip::commit_rgb(RGB rgb)
+template<size_t size>
+void RGBWStrip<size>::set_rgbw(RGBW rgbw)
 {
-    double colors[] = {rgb.r, rgb.g, rgb.b};
-
-    return move_towards(colors);
-}
-
-void RGBStrip::commit_hsv(HSV hsv)
-{
-    RGB rgb = hsv_rgb(hsv);
-
-    return commit_rgb(rgb);
-}
-
-void RGBWStrip::set_hsv(HSV hsv)
-{
-    RGB rgb = hsv_rgb(hsv);
-
-    set_rgbw({rgb.r, rgb.g, rgb.b, (1.0 - hsv.val) * 255.0});
-}
-
-void RGBWStrip::set_rgbw(RGBW rgbw)
-{
-    set_rgb({rgbw.r, rgbw.g, rgbw.b});
-
-    m_pins[3].set_signal(rgbw.w);
-}
-
-void RGBWStrip::commit_rgbw(RGBW rgbw)
-{
-    double color_list[] = {rgbw.r, rgbw.g, rgbw.b, rgbw.w};
-
-    return move_towards(color_list);
+    double list[4];
+    
+    set_signals(rgbw.to_list(list));
 }
