@@ -3,12 +3,12 @@
 
 template<size_t size>
 StripColorHandler<size>::StripColorHandler(ColorPin pins[size])
-    : m_pins(pins), m_queue_item(nullptr)
+    : m_pins(pins), m_queue_item(nullptr), m_turn_off(false)
 {  }
 
 template<size_t size>
 StripColorHandler<size>::StripColorHandler(ColorPin pins[size], uint8_t colors[size])
-    : m_pins(pins), m_queue_item(nullptr)
+    : m_pins(pins), m_queue_item(nullptr), m_turn_off(false)
 {
     set(colors);
 }
@@ -20,7 +20,7 @@ CallbackStatus StripColorHandler<size>::on_call()
 
     for (uint8_t i = 0; i < m_size; i++)
     {
-        if (m_pins[i].move_towards(m_colors[i]))
+        if (m_pins[i].move_towards(m_turn_off ? 0 : m_colors[i]))
         {
             status = REPEAT;
         }
@@ -42,6 +42,19 @@ void StripColorHandler<size>::on_remove()
 }
 
 template<size_t size>
+QueueItem* StripColorHandler<size>::add_to_queue()
+{
+    if (m_queue_item != nullptr)
+    {
+        cycle_handler.queue_remove(m_queue_item);
+    }
+    
+    m_queue_item = cycle_handler.add(this);
+
+    return m_queue_item;
+}
+
+template<size_t size>
 QueueItem* StripColorHandler<size>::run(bool fade)
 {
     if (!fade)
@@ -54,15 +67,25 @@ QueueItem* StripColorHandler<size>::run(bool fade)
         return nullptr;
     }
 
-    if (m_queue_item != nullptr)
+    return this->add_to_queue();
+}
+
+template<size_t size>
+QueueItem* StripColorHandler<size>::toggle(bool on, bool fade)
+{
+    m_turn_off = !on;
+
+    if (m_turn_off && !fade)
     {
-        cycle_handler.queue_remove(m_queue_item);
+        for (uint8_t i = 0; i < m_size; i++)
+        {
+            m_pins[i].set_signal(0);
+        }
+
+        return nullptr;
     }
-    
-    m_queue_item = cycle_handler.add(this);
 
-    return m_queue_item;
-
+    return this->run(fade);
 }
 
 template<size_t size>
@@ -120,6 +143,12 @@ template<size_t size>
 QueueItem* Strip<size>::commit(bool fade)
 {
     return m_handler.run(fade);
+}
+
+template<size_t size>
+QueueItem* Strip<size>::toggle(bool on, bool fade)
+{
+    return m_handler.toggle(on, fade);
 }
 
 template<size_t size>

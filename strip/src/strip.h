@@ -16,16 +16,20 @@ public:
     void on_remove();
 
     QueueItem* run(bool fade = false);
+    QueueItem* toggle(bool on = true, bool fade = false);
 
     CallbackStatus on_call();
 
 protected:
+    QueueItem* add_to_queue();
     void remove();
 
     ColorPin* m_pins;
     uint8_t m_colors[size];
 
     QueueItem* m_queue_item;
+
+    bool m_turn_off;
 
     uint8_t m_size = size;
 };
@@ -41,6 +45,7 @@ public:
     CallbackStatus on_call();
 
     QueueItem* commit(bool fade = false);
+    QueueItem* toggle(bool on = false, bool fade = false);
 
     void show(bool show_ = true);
     void clear();
@@ -50,6 +55,7 @@ public:
     bool is_shown();
 
 protected:
+
     ColorPin* m_pins;
     StripColorHandler<size> m_handler;
 

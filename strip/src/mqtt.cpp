@@ -58,16 +58,13 @@ T* extract_values(String& str, T* arr, uint8_t length)
 
 void process_instruction(PacketCode code, String args)
 {
+    bool is_fade = code & FADE;
+
     if (code & OFF)
     {
-        strip.show(false);
+        strip.toggle(false, is_fade);
 
         return;
-    }
-    else if (code & ON)
-    {
-        strip.clear();
-        strip.show(true);
     }
 
     String mode = scan_delim(args, '-');
@@ -90,7 +87,14 @@ void process_instruction(PacketCode code, String args)
         // TODO: Error
     }
 
-    strip.commit(code & FADE);
+    if (code & ON)
+    {
+        strip.toggle(true, is_fade);
+    }
+    else
+    {
+        strip.commit(is_fade);
+    }
 
 }
 
