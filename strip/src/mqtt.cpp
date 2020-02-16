@@ -50,7 +50,7 @@ T* extract_values(String& str, T* arr, uint8_t length)
             // TODO: Error
         }
 
-        arr[i] = val.toDouble();
+        arr[i] = static_cast<T>(val.toDouble());
     }
 
     return arr;
@@ -66,6 +66,7 @@ void process_instruction(PacketCode code, String args)
     }
     else if (code & ON)
     {
+        strip.clear();
         strip.show(true);
     }
 
@@ -74,7 +75,7 @@ void process_instruction(PacketCode code, String args)
 
     if (mode == "rgb")
     {
-        double values[3];
+        uint8_t values[3];
         strip.set_signals(extract_values(args, values, 3));
     }
     else if (mode == "hsv")

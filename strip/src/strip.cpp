@@ -1,17 +1,13 @@
 
 #include "strip.h"
 
-ColorPin pins[] = {3, 5, 6};
-
-RGBStrip<3> strip(pins, false);
-
 template<size_t size>
 StripColorHandler<size>::StripColorHandler(ColorPin pins[size])
     : m_pins(pins), m_queue_item(nullptr)
 {  }
 
 template<size_t size>
-StripColorHandler<size>::StripColorHandler(ColorPin pins[size], double colors[size])
+StripColorHandler<size>::StripColorHandler(ColorPin pins[size], uint8_t colors[size])
     : m_pins(pins), m_queue_item(nullptr)
 {
     set(colors);
@@ -24,7 +20,7 @@ CallbackStatus StripColorHandler<size>::on_call()
 
     for (uint8_t i = 0; i < m_size; i++)
     {
-        if (!m_pins[i].move_towards(m_colors[i]))
+        if (m_pins[i].move_towards(m_colors[i]))
         {
             status = REPEAT;
         }
@@ -34,9 +30,9 @@ CallbackStatus StripColorHandler<size>::on_call()
 }
 
 template<size_t size>
-void StripColorHandler<size>::set(double colors[size])
+void StripColorHandler<size>::set(uint8_t colors[size])
 {
-    m_colors = colors;
+    for (size_t i = 0; i < size; i++) m_colors[i] = colors[i];
 }
 
 template<size_t size>
@@ -109,10 +105,8 @@ void Strip<size>::clear()
 }
 
 template<size_t size>
-void Strip<size>::set_signals(double* signals)
+void Strip<size>::set_signals(uint8_t* signals)
 {
-    clear();
-
     m_handler.set(signals);
 }
 
@@ -129,23 +123,28 @@ QueueItem* Strip<size>::commit(bool fade)
 }
 
 template<size_t size>
-void RGBStrip<size>::set_rgb(RGB rgb)
+void _RGBStrip<size>::set_rgb(RGB rgb)
 {   
-    double list[3];
+    uint8_t list[3];
     
-    set_signals(rgb.to_list(list));
+    this->set_signals(rgb.to_list(list));
 }
 
 template<size_t size>
-void RGBStrip<size>::set_hsv(HSV hsv)
+void _RGBStrip<size>::set_hsv(HSV hsv)
 {
     set_rgb(hsv_rgb(hsv));
 }
 
 template<size_t size>
-void RGBWStrip<size>::set_rgbw(RGBW rgbw)
+void _RGBWStrip<size>::set_rgbw(RGBW rgbw)
 {
-    double list[4];
+    uint8_t list[4];
     
-    set_signals(rgbw.to_list(list));
+    this->set_signals(rgbw.to_list(list));
 }
+
+template class Strip<3>;
+template class Strip<4>;
+template class _RGBStrip<3>;
+template class _RGBWStrip<4>;

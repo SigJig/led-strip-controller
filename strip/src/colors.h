@@ -26,23 +26,23 @@ protected:
 
 struct RGB
 {
-    double r, g, b;
+    uint8_t r, g, b;
 
-    double* to_list(double* arr);
+    uint8_t* to_list(uint8_t arr[3]);
 };
 
 struct RGBW
 {
-    double r, g, b, w;
+    uint8_t r, g, b, w;
 
-    double* to_list(double* arr);
+    uint8_t* to_list(uint8_t arr[4]);
 };
 
 struct HSV
 {
     double hue, sat, val;
 
-    double* to_list(double* arr);
+    double* to_list(double arr[3]);
 };
 
 RGB hsv_rgb(HSV hsv);

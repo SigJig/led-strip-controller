@@ -21,7 +21,7 @@ bool ColorPin::move_towards(double sig)
 {
     if (sig == m_signal) return false;
 
-    set_signal(m_signal + (sig > m_signal) ? 1 : -1);
+    set_signal(m_signal + ((sig > m_signal) ? 1 : -1));
 
     return true;
 }
@@ -31,7 +31,7 @@ double ColorPin::get_signal()
     return m_signal;
 }
 
-double* RGB::to_list(double* arr)
+uint8_t* RGB::to_list(uint8_t arr[3])
 {
     arr[0] = r;
     arr[1] = g;
@@ -40,7 +40,7 @@ double* RGB::to_list(double* arr)
     return arr;
 }
 
-double* RGBW::to_list(double* arr)
+uint8_t* RGBW::to_list(uint8_t arr[4])
 {
     arr[0] = r;
     arr[1] = g;
@@ -50,7 +50,7 @@ double* RGBW::to_list(double* arr)
     return arr;
 }
 
-double* HSV::to_list(double* arr)
+double* HSV::to_list(double arr[3])
 {
     RGB rgb = hsv_rgb(*this);
 
@@ -66,7 +66,7 @@ RGB hsv_rgb(HSV hsv)
     auto f = [&](uint8_t n)
     {
       double k = fmod(n + hsv.hue / 60.0, 6);
-      return (hsv.val - hsv.val * hsv.sat * max(min(min(k, 4 - k), 1.0), 0.0)) * 255;
+      return static_cast<uint8_t>((hsv.val - hsv.val * hsv.sat * max(min(min(k, 4 - k), 1.0), 0.0)) * 255);
     };
 
     return {f(5), f(3), f(1)};

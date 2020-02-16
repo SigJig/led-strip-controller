@@ -9,6 +9,10 @@
 #include "cyclehandler.h"
 #include "wifi.h"
 
+
+ColorPin pins[3] = {3, 5, 6};
+RGBStrip strip(pins, false);
+
 uint8_t led_pins[] = {9, 10, 11};
 
 void led_write(uint8_t bytes)
