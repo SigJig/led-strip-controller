@@ -143,8 +143,3 @@ void _RGBWStrip<size>::set_rgbw(RGBW rgbw)
     
     this->set_signals(rgbw.to_list(list));
 }
-
-template class Strip<3>;
-template class Strip<4>;
-template class _RGBStrip<3>;
-template class _RGBWStrip<4>;

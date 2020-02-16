@@ -81,4 +81,6 @@ typedef _RGBStrip<> RGBStrip;
 
 extern RGBStrip strip;
 
+#include "strip.tpp"
+
 #endif // STRIP_H
