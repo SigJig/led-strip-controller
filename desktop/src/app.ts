@@ -1,6 +1,10 @@
 
+import './mqtt'
 import { app, BrowserWindow } from 'electron'
 import { staticFile } from './helpers'
+import Dotenv from 'dotenv'
+
+Dotenv.config()
 
 app.on('ready', function loadInitial() {
 
@@ -8,11 +12,14 @@ app.on('ready', function loadInitial() {
         width: 900,
         height: 600,
         show: false,
-        frame: false
+        frame: false,
+        webPreferences: {
+            nodeIntegration: true
+        }
     })
 
     window.maximize()
-    window.loadFile(staticFile('html', 'controls.html'))
+    window.loadFile(staticFile('html', 'index.html'))
     window.once('ready-to-show', window.show)
 
 })
