@@ -19,7 +19,7 @@ app.on('ready', function loadInitial() {
     })
 
     window.maximize()
-    window.loadFile(staticFile('html', 'index.html'))
+    window.loadFile(staticFile('html', 'controls.html'))
     window.once('ready-to-show', window.show)
 
 })

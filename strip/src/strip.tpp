@@ -166,6 +166,12 @@ void _RGBStrip<size>::set_hsv(HSV hsv)
 }
 
 template<size_t size>
+void _RGBStrip<size>::set_hsl(HSL hsl)
+{
+    set_rgb(hsl_rgb(hsl));
+}
+
+template<size_t size>
 void _RGBWStrip<size>::set_rgbw(RGBW rgbw)
 {
     uint8_t list[4];

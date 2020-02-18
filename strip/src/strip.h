@@ -71,6 +71,7 @@ public:
 
     void set_rgb(RGB rgb);
     void set_hsv(HSV hsv);
+    void set_hsl(HSL hsl);
 };
 
 template<size_t size = 4>

@@ -82,6 +82,13 @@ void process_instruction(PacketCode code, String args)
 
         strip.set_hsv({values[0], values[1], values[2]});
     }
+    else if (mode == "hsl")
+    {
+        double values[3];
+        extract_values(args, values, 3);
+
+        strip.set_hsl({values[0], values[1], values[2]});
+    }
     else
     {
         // TODO: Error
