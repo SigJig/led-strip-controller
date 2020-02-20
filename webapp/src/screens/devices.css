@@ -1,0 +1,44 @@
+
+.devices {
+    display: flex;
+    flex: none;
+    width: 90%;
+    height: 80%;
+    margin: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.device-card {
+    display: flex;
+    width: 400px;
+    height: 400px;
+    color: white;
+    border: 1px solid #070707;
+    flex-direction: column;
+    justify-self: center;
+    align-items: center;
+    margin: 5px;
+}
+
+.device-card:hover {
+    background-color: #19142B;
+}
+
+.device-card span {
+    flex: 1;
+    font-size: 1.3rem;
+}
+
+.device-card img {
+    flex: 1;
+    width: 40%;
+    height: 40%;
+}
+
+.device-status {
+    position: relative;
+    background-color: #09db85;
+    height: 1%;
+    width: 100%;
+}
