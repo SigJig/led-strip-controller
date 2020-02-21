@@ -3,10 +3,12 @@ import React from 'react'
 import { IconType } from 'react-icons/lib/cjs'
 import { FaRegLightbulb as Bulb } from 'react-icons/fa'
 
+// import { d1 } from '../connector'
+
 import './devices.css'
 
 interface ICardState {
-
+    checked: boolean
 }
 
 interface ICardProps {
@@ -22,14 +24,35 @@ const devices = Array(8).fill(
 )
 
 export class DeviceCard extends React.Component<ICardProps, ICardState> {
+    constructor(props: ICardProps) {
+        super(props)
+
+        this.state = { checked: false }
+        this.toggleCheckbox = this.toggleCheckbox.bind(this)
+    }
+
+    toggleCheckbox({target}: React.ChangeEvent<HTMLInputElement>) {
+        const { checked } = target
+
+        // d1.power(checked)
+        this.setState({checked: checked})
+    }
+
     render() {
         const { image, text } = this.props
+        const A = image;
 
         return (
             <div className="device-card">
-                <span>{text}</span>
-                <div className="device-switch"></div>
-                <div className="device-status"></div>
+                <div className="device-inner">
+                    <A className="device-icon"/>
+                    <span>{text}</span>
+                    <label className="device-switch">
+                        <input type="checkbox" onChange={this.toggleCheckbox}/>
+                        <span className="slider"></span>
+                    </label>
+                </div>
+                <div className={"device-status " + (this.state.checked ? "success" : "")}></div>
             </div>
         )
     }
