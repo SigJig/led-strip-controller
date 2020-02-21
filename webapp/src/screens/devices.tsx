@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { IconType } from 'react-icons/lib/cjs'
-import { FaRegLightbulb as Bulb } from 'react-icons/fa'
+import { AiOutlineBulb as Bulb } from 'react-icons/ai'
 
 // import { d1 } from '../connector'
 
