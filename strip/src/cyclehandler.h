@@ -8,8 +8,6 @@
     #define QUEUE_MAX_SIZE 10
 #endif
 
-#include "cyclehandler.h"
-
 enum CallbackStatus : uint8_t
 {
     SUCCESS = 0x00,
@@ -94,4 +92,4 @@ protected:
 
 extern _CycleHandler cycle_handler;
 
-#endif // CYCLEHANDLER_H
+#endif // CYCLEHANDLER_H/

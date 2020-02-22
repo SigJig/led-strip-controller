@@ -8,8 +8,6 @@ _CycleHandler cycle_handler;
 CallbackStatus Action::on_call()
 {
     // TODO: Throw error
-    Serial.println("Base function called");
-
     return ERROR;
 }
 Action::~Action() {  }
