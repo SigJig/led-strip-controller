@@ -52,7 +52,7 @@ export class DeviceCard extends React.Component<ICardProps, ICardState> {
                         <span className="slider"></span>
                     </label>
                 </div>
-                <div className={"status " + (this.state.checked ? "success" : "")}></div>
+                <div className={`status${this.state.checked ? " success " : ""}`}></div>
             </div>
         )
     }
