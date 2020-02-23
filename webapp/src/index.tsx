@@ -10,8 +10,8 @@ import Devices from './screens/devices'
 const App: React.FC = () => {
     return (
         <div className="container">
-            <Navbar/>
             <Devices/>
+            <Navbar/>
         </div>
     )
 }

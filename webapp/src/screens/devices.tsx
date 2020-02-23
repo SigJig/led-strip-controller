@@ -5,7 +5,7 @@ import { AiOutlineBulb as Bulb } from 'react-icons/ai'
 
 // import { d1 } from '../connector'
 
-import './devices.css'
+import './devices.scss'
 
 interface ICardState {
     checked: boolean
@@ -43,16 +43,16 @@ export class DeviceCard extends React.Component<ICardProps, ICardState> {
         const A = image;
 
         return (
-            <div className="device-card">
-                <div className="device-inner">
-                    <A className="device-icon"/>
+            <div className="card">
+                <div className="inner">
+                    <A className="icon"/>
                     <span>{text}</span>
-                    <label className="device-switch">
+                    <label className="switch">
                         <input type="checkbox" onChange={this.toggleCheckbox}/>
                         <span className="slider"></span>
                     </label>
                 </div>
-                <div className={"device-status " + (this.state.checked ? "success" : "")}></div>
+                <div className={"status " + (this.state.checked ? "success" : "")}></div>
             </div>
         )
     }

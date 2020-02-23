@@ -1,7 +1,7 @@
 
 import React from 'react'
 import Strings from '../const/strings'
-import './navbar.css'
+import './navbar.scss'
 
 interface INavState {
 
