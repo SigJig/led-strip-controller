@@ -16,11 +16,7 @@ export default class Navbar extends React.Component<{}, INavState> {
         return (
             <nav className="navbar">
                 <ul>
-                    {routes.map(x => (
-                        <li>
-                            {x}
-                        </li>
-                    ))}
+                    {routes.map(x => <li>{x}</li>)}
                 </ul>
             </nav>
         )

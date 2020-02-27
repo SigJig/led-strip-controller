@@ -1,108 +1,102 @@
 
 @import '../styles/colors';
 @import '../styles/utils';
-@import '../styles/classes';
 
-.devices {
+.container {
     display: flex;
-    flex: none;
-    width: 90%;
-    height: 80%;
-    margin: auto;
-    flex-wrap: wrap;
     justify-content: center;
-    
-    .card {
-        $size: 400px;
-        
+
+    margin-top: 80px;
+
+    ul {
+        $outer-margin: 20px;
+        $li-width: 325px;
+        $li-margin: 25px;
+
+        $max-row-len: 8;
+
         display: flex;
-        width: $size;
-        height: $size;
-        color: $text-main;
-        border: 1px solid $border-main;
-        flex-direction: column;
-        justify-self: center;
-        align-items: center;
-        margin: 6px 2.5px;
-        
-        .icon {
-            width: 150px;
-            height: 150px;
-            margin-bottom: 60px;
+        list-style: none;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+
+        @function calc-width($amt) {
+            @return (($li-margin * 2) * $amt) + ($li-width * $amt);
         }
-        
-        .switch {
-            $width: 70px;
-            $height: 25px;
+
+        @for $i from 1 through $max-row-len {
+            $_width: calc-width($i);
             
-            display: inline-block;
-            width: $width;
-            height: $height;
-            
-            input {
-                display: inline-block;
-                opacity: 0;
-                width: 0;
-                height: 0;
-            }
-            
-            .slider {
-                cursor: pointer;
-                display: inline-block;
-                background-color: $background-dark;
-                border-radius: $width / 2;
-                width: 100%;
-                height: 100%;
-                
-                @include transition(.4s);
-            }
-            
-            .slider:before {
-                display: inline-block;
-                content: "";
-                width: $height; // Same as the height of the bar
-                height: 100%;
-                border-radius: 50%;
-                background-color: $error;
-                
-                @include transition(.4s);
-            }
-            
-            input:checked + .slider:before {
-                background-color: $success;
-                
-                @include transform(translateX($width - $height));
+            @media screen and (
+                min-width: ($outer-margin + $_width)
+            ) and (
+                max-width: ($outer-margin + calc-width($i + 1))
+            ) {
+                max-width: $_width;
             }
         }
-        
-        span {
-            flex: 1;
-            font-size: 1.3rem;
-        }
-        
-        img {
-            flex: 1;
-            width: 40%;
-            height: 40%;
-        }
-        
-        .inner {
+
+        li {
             display: flex;
-            flex: auto;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 50px 0px;
-        }
-        
-        .status {
-            position: relative;
             flex: none;
-            background-color: $error;
-            height: 1%;
-            width: 100%;
-            
-            @include transition(.4s);
+            flex-direction: column;
+            align-items: center;
+            background-color: $text-main;
+            height: auto;
+            margin: $li-margin;
+
+            width: $li-width;
+            border-radius: 10px;
+
+            box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.032);
+
+            .icon {
+                width: 30%;
+                height: $li-width * 0.3;
+                margin-bottom: 0;
+                padding-bottom: 0;
+            }
+
+            span {
+                margin-top: 0;
+            }
+
+            label {
+                position: relative;
+                
+                input {
+                    position: absolute;
+                    display: inline-block;
+                    width: 0;
+                    height: 0;
+                    opacity: 0;
+                }
+                
+                span {
+                    $slider-width: 60px;
+                    $slider-height: 20px;
+
+                    cursor: pointer;
+                    display: inline-block;
+                    width: $slider-width;
+                    height: $slider-height;
+                    border-radius: $slider-width / 2;
+                    background-color: $success;
+                    
+                    &:before {
+                        display: inline-block;
+                        content: "";
+                        width: $slider-height;
+                        height: $slider-height;
+                        background-color: $text-main;
+
+                        border-radius: 50%;
+
+                        @include transition(400ms);
+                    }
+                }
+            }
         }
     }
 }

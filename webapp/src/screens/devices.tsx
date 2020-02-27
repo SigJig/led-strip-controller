@@ -1,68 +1,29 @@
 
 import React from 'react'
-import { IconType } from 'react-icons/lib/cjs'
+import './devices.scss'
 import { AiOutlineBulb as Bulb } from 'react-icons/ai'
 
-// import { d1 } from '../connector'
+const routes = [
+    'Devices', 'Connectors', 'Settings'
+]
 
-import './devices.scss'
-
-interface ICardState {
-    checked: boolean
-}
-
-interface ICardProps {
-    image: IconType,
-    text: string
-}
-
-const devices = Array(8).fill(
-    {
-        image: Bulb,
-        text: 'Desk Lights (Back Left)'
-    }
-)
-
-export class DeviceCard extends React.Component<ICardProps, ICardState> {
-    constructor(props: ICardProps) {
-        super(props)
-
-        this.state = { checked: false }
-        this.toggleCheckbox = this.toggleCheckbox.bind(this)
-    }
-
-    toggleCheckbox({target}: React.ChangeEvent<HTMLInputElement>) {
-        const { checked } = target
-
-        // d1.power(checked)
-        this.setState({checked: checked})
-    }
-
-    render() {
-        const { image, text } = this.props
-        const A = image;
-
-        return (
-            <div className="card">
-                <div className="inner">
-                    <A className="icon"/>
-                    <span>{text}</span>
-                    <label className="switch">
-                        <input type="checkbox" onChange={this.toggleCheckbox}/>
-                        <span className="slider"></span>
-                    </label>
-                </div>
-                <div className={`status${this.state.checked ? " success " : ""}`}></div>
-            </div>
-        )
-    }
-}
-
-export default class Devices extends React.Component<{}, {}> {
+export default class Alt extends React.Component<{}, {}> {
     render() {
         return (
-            <div className="devices">
-                {devices.map(x => <DeviceCard {...x}/>)}
+            <div className="container">
+                <ul>
+                    {Array(6).fill(undefined).map(x => (
+                    <li>
+                        <Bulb className="icon"/>
+                        <span>Desk Lights (Back Left)</span>
+                        <span>Lightsource</span>
+                        <label>
+                            <input type="checkbox"/>
+                            <span></span>
+                        </label>
+                    </li>
+                    ))}
+                </ul>
             </div>
         )
     }

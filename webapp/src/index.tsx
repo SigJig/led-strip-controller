@@ -9,9 +9,9 @@ import Devices from './screens/devices'
 
 const App: React.FC = () => {
     return (
-        <div className="container">
-            <Devices/>
+        <div>
             <Navbar/>
+            <Devices/>
         </div>
     )
 }
