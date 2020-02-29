@@ -1,7 +1,11 @@
 
+@import './styles/colors';
+
 * {
   margin: 0;
   padding: 0;
+
+  outline: none;
 }
 
 html {
@@ -20,7 +24,7 @@ body {
   scrollbar-width: none;
 
   font-family: Montserrat;
-  background-color: #fff;
+  background-color: $text-darker;
   
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

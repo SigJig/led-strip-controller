@@ -52,7 +52,7 @@ $transition-time: 300ms;
             border-radius: 10px;
 
             padding: 50px 0;
-            border-bottom: 3px solid $success;
+            border-bottom: 3px solid $inactive;
 
             box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.032);
 
@@ -70,11 +70,11 @@ $transition-time: 300ms;
             span {
                 margin: 2px 0;
                 font-size: 1.2rem;
-            }
 
-            .title {
-                font-weight: bold;
-                margin-top: 10px;
+                &.title {
+                    font-weight: bold;
+                    margin-top: 10px;
+                }
             }
 
             label {
@@ -145,6 +145,7 @@ $transition-time: 300ms;
                     background-color: $background-black;
                     color: $text-main;
                     margin: $li-margin;
+                    position: relative;
 
                     justify-content: center;
                     align-items: center;
@@ -156,9 +157,19 @@ $transition-time: 300ms;
                     }
 
                     &:first-child {
-                        // color: $background-black;
-                        background-color: $success;
-                        // border: 1px solid $background-black;
+                        background-color: $accent;
+                    }
+
+                    & :not(span) {
+                        $size: 20px;
+
+                        position: absolute;
+                        left: $li-height / 2;
+                        width: $size;
+                        height: $size;
+                        color: $text-main;
+
+                        box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
                     }
                 }
 

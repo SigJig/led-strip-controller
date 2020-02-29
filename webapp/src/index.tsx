@@ -1,13 +1,16 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.css'
+import './index.scss'
 import * as serviceWorker from './serviceWorker'
 
 import Navbar from './components/navbar'
 import Devices from './screens/devices'
 
 import { AiOutlineBulb } from 'react-icons/ai'
+import { GoGear } from 'react-icons/go'
+
+import { Circle } from './components/shapes'
 
 const App: React.FC = () => {
     return (
@@ -17,11 +20,13 @@ const App: React.FC = () => {
                 title: "Desk Lights (Back Left)",
                 buttons: [
                     {
-                        title: "Manage",
+                        renderIcon: () => <Circle color={"#9c0879"}/>,
+                        title: "Change Color",
                         action: () => {}
                     },
                     {
-                        title: "Change Color",
+                        title: "Manage",
+                        renderIcon: () => <GoGear/>,
                         action: () => {}
                     }
                 ],

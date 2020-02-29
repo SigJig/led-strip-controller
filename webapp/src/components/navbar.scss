@@ -7,23 +7,67 @@
     $spacing: 60px;
     $font-size: 1.1rem;
     $transition-time: 400ms;
+    $edge-margin: 20px;
 
-    z-index: 6;
+    z-index: 5;
     
     top: 0;
     height: $height;
     width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     background-color: $background-black;
-
+    
     position: sticky;
+    
+    @media screen and (max-width: 1000px) {
+        bottom: 0 !important;
+        top: auto !important;
+        
+        ul {
+            width: 100%;
 
+            li {
+                padding: 0 !important;
+
+                &.mob-nav-elem {
+                    $size: 50px;
+
+                    width: $size;
+                    height: $size;
+                }
+            }
+        }
+
+        .mob-nav-elem {
+            display: initial !important;
+        }
+
+        .fs-nav-elem {
+            display: none;
+        }
+    }
+
+    .mob-nav-elem {
+        display: none;
+    }
+    
+    span {
+        position: absolute;
+        color: $text-main;
+        padding: 0 $spacing;
+        font-size: $font-size;
+    }
+    
     ul {
         display: flex;
-        flex: none;
+        flex: auto;
         height: $height;
         list-style: none;
-        margin: 0;
-        justify-content: flex-end;
+        position: absolute;
+        right: 0;
+        justify-content: space-evenly;
         
         li {
             cursor: pointer;
@@ -55,7 +99,7 @@
                 flex: none;
                 bottom: 0;
                 width: 30%;
-                height: 1px;
+                height: 3px;
 
                 @include transition(opacity $transition-time);
             }

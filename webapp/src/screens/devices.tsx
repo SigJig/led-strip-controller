@@ -6,24 +6,39 @@ const routes = [
     'Devices', 'Connectors', 'Settings'
 ]
 
-interface IButton {
-    Icon?: JSX.Element,
+export interface IButton {
+    renderIcon?: CallableFunction,
     title: string,
-    action: CallableFunction
+    action: any
 }
 
-interface IDevicesProps {
-    devices: Array<{
-        buttons: any[],
-        title: string,
-        Icon: any,
-        desc?: string
-    }>
+export interface IDevice {
+    buttons: IButton[],
+    title: string,
+    Icon: any,
+    desc?: string
+}
+
+export interface IDevicesProps {
+    devices: Array<IDevice>
 }
 
 export default class Devices extends React.Component<IDevicesProps, {}> {
+    renderButtons(buttons: IButton[]) {
+        return (
+            <ul className="buttons">
+                {buttons.map(x => (
+                    <li onClick={x.action}>
+                        {x.renderIcon && x.renderIcon()}
+                        <span>{x.title}</span>
+                    </li>
+                ))}
+            </ul>
+        )
+    }
+
     renderDevices() {
-        const { devices } = this.props;
+        const { devices } = this.props
 
         return (
             <ul className="device-list">
@@ -39,12 +54,7 @@ export default class Devices extends React.Component<IDevicesProps, {}> {
                                 <input type="checkbox"/>
                                 <span/>
                             </label>
-                            {buttons && buttons.length && (
-                                <ul className="buttons">
-                                    <li>Change Color</li>
-                                    <li>Manage</li>
-                                </ul>
-                            )}
+                            {buttons && buttons.length && this.renderButtons(buttons)}
                         </li>
                     ))
                 }
