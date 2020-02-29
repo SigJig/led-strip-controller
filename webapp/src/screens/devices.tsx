@@ -1,23 +1,7 @@
 
 import React from 'react'
+import { IDevice, IButton } from '../devices/base'
 import './devices.scss'
-
-const routes = [
-    'Devices', 'Connectors', 'Settings'
-]
-
-export interface IButton {
-    renderIcon?: CallableFunction,
-    title: string,
-    action: any
-}
-
-export interface IDevice {
-    buttons: IButton[],
-    title: string,
-    Icon: any,
-    desc?: string
-}
 
 export interface IDevicesProps {
     devices: Array<IDevice>
@@ -39,13 +23,14 @@ export default class Devices extends React.Component<IDevicesProps, {}> {
 
     renderDevices() {
         const { devices } = this.props
+        console.log(devices)
 
         return (
             <ul className="device-list">
                 {
-                    devices.map(({buttons, title, Icon, desc}) => (
+                    devices.map(({buttons, title, icon, desc}) => (
                         <li className="device-item">
-                            <Icon className="icon"/>
+                            {React.createElement(icon, {className: "icon"})}
                             <span className="title">{title}</span>
                             {desc && (
                                 <span className="desc">{desc}</span>

@@ -33,7 +33,7 @@ export default class Navbar extends React.Component<{}, INavState> {
                 const fnc = Reflect.get(t, v, r)
                 const res = fnc.apply(t)
 
-                return res > 10 ? res.toString() : ('0' + res.toString())
+                return res >= 10 ? res.toString() : ('0' + res.toString())
             }
         })
         

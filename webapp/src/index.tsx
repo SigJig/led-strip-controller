@@ -7,32 +7,17 @@ import * as serviceWorker from './serviceWorker'
 import Navbar from './components/navbar'
 import Devices from './screens/devices'
 
-import { AiOutlineBulb } from 'react-icons/ai'
-import { GoGear } from 'react-icons/go'
+import RGBStrip from './devices/rgbstrip'
 
-import { Circle } from './components/shapes'
+const devices = [
+    new RGBStrip("Testing strip", "#9c0879")
+]
 
 const App: React.FC = () => {
     return (
         <div>
             <Navbar/>
-            <Devices devices={Array(6).fill({
-                title: "Desk Lights (Back Left)",
-                buttons: [
-                    {
-                        renderIcon: () => <Circle color={"#9c0879"}/>,
-                        title: "Change Color",
-                        action: () => {}
-                    },
-                    {
-                        title: "Manage",
-                        renderIcon: () => <GoGear/>,
-                        action: () => {}
-                    }
-                ],
-                desc: "Lightsource",
-                Icon: AiOutlineBulb
-            })}/>
+            <Devices devices={devices}/>
         </div>
     )
 }
