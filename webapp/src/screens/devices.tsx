@@ -1,29 +1,61 @@
 
 import React from 'react'
 import './devices.scss'
-import { AiOutlineBulb as Bulb } from 'react-icons/ai'
 
 const routes = [
     'Devices', 'Connectors', 'Settings'
 ]
 
-export default class Alt extends React.Component<{}, {}> {
+interface IButton {
+    Icon?: JSX.Element,
+    title: string,
+    action: CallableFunction
+}
+
+interface IDevicesProps {
+    devices: Array<{
+        buttons: any[],
+        title: string,
+        Icon: any,
+        desc?: string
+    }>
+}
+
+export default class Devices extends React.Component<IDevicesProps, {}> {
+    renderDevices() {
+        const { devices } = this.props;
+
+        return (
+            <ul className="device-list">
+                {
+                    devices.map(({buttons, title, Icon, desc}) => (
+                        <li className="device-item">
+                            <Icon className="icon"/>
+                            <span className="title">{title}</span>
+                            {desc && (
+                                <span className="desc">{desc}</span>
+                            )}
+                            <label>
+                                <input type="checkbox"/>
+                                <span/>
+                            </label>
+                            {buttons && buttons.length && (
+                                <ul className="buttons">
+                                    <li>Change Color</li>
+                                    <li>Manage</li>
+                                </ul>
+                            )}
+                        </li>
+                    ))
+                }
+            </ul>
+        )
+    }
+
     render() {
         return (
             <div className="container">
-                <ul>
-                    {Array(6).fill(undefined).map(x => (
-                    <li>
-                        <Bulb className="icon"/>
-                        <span>Desk Lights (Back Left)</span>
-                        <span>Lightsource</span>
-                        <label>
-                            <input type="checkbox"/>
-                            <span></span>
-                        </label>
-                    </li>
-                    ))}
-                </ul>
+                {this.renderDevices()}
             </div>
         )
     }

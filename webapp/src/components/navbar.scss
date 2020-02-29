@@ -7,13 +7,15 @@
     $spacing: 60px;
     $font-size: 1.1rem;
     $transition-time: 400ms;
+
+    z-index: 6;
     
     top: 0;
     height: $height;
     width: 100%;
     background-color: $background-black;
 
-    position: fixed;
+    position: sticky;
 
     ul {
         display: flex;
