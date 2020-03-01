@@ -7,6 +7,12 @@ name = "pypi"
 falcon = "*"
 
 [dev-packages]
+pylint = "*"
+astroid = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true
