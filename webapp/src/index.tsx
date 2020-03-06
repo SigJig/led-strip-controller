@@ -6,18 +6,21 @@ import * as serviceWorker from './serviceWorker'
 
 import Navbar from './components/navbar'
 import Devices from './screens/devices'
+import Colorpicker from './screens/colorpicker'
 
 import RGBStrip from './devices/rgbstrip'
 
 const devices = [
-    new RGBStrip("Testing strip", "#9c0879")
+    new RGBStrip("Testing strip", "#9c0879"),
+    new RGBStrip("Testing strip", "#9c0879"),
 ]
 
 const App: React.FC = () => {
     return (
-        <div>
+        <div id="initial-div">
             <Navbar/>
             <Devices devices={devices}/>
+            {/* <Colorpicker hsv={{hue: 170, sat: 1, val: 1}}/> */}
         </div>
     )
 }

@@ -35,15 +35,15 @@ export default class RGBStrip implements IDevice {
         this.statusClass = 'inactive'
 
         try {
-            await axios.patch('http://localhost:8000/devices/1', {
+            await axios.patch('http://192.168.1.220:8000/devices/1', {
                 active: target.checked,
                 fade: true,
-                color: 'hsv-300-1-1'
+                color: 'hsv-170-1-0.2'
             })
 
             this.statusClass = target.checked ? 'success' : 'inactive'
         } catch (e) {
-            throw e
+            console.log(e)
         }
     }
 }
