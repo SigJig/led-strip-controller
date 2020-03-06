@@ -1,18 +1,16 @@
 
+import enum
 import falcon
+from devices.rgbstrip import RGBStrip
 
-class DeviceHandler:
-    def on_get(self, req, resp, device_id):
-        device_id = int(device_id)
+class CorsMiddleware:
+    def process_request(self, req, resp):
+        resp.set_header('Access-Control-Allow-Origin', req.get_header('origin'))
+        resp.set_header('Access-Control-Allow-Methods', '*')
+        resp.set_header('Access-Control-Allow-Headers', '*')
 
-        resp.status = falcon.HTTP_200
-        resp.media = {
-            'color': '#fff',
-            'device': device_id
-        }
+app = falcon.App(middleware=[CorsMiddleware()])
 
+app.add_route('/devices/{device_id:int}', RGBStrip(host='localhost', port=1883))
 
-api = falcon.API()
-
-device_handler = DeviceHandler()
-api.add_route('/devices/{device_id}', device_handler)
+print('Init completed')
