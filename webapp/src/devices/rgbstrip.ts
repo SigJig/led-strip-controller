@@ -3,7 +3,7 @@ import React from 'react'
 import axios from 'axios'
 import Strings from '../const/strings'
 
-import { IDevice, IButton } from './base'
+import { IDevice, IButton, StatusType } from './base'
 import { AiOutlineBulb as Bulb } from 'react-icons/ai'
 import { GoGear as Gear } from 'react-icons/go'
 import { Circle } from '../components/shapes'
@@ -11,6 +11,7 @@ import { Circle } from '../components/shapes'
 export default class RGBStrip implements IDevice {
     public icon: any
     public buttons: IButton[]
+    public statusClass: StatusType= 'inactive'
 
     constructor(public title: string, public color: string, public desc?: string) {
 
@@ -31,12 +32,16 @@ export default class RGBStrip implements IDevice {
     }
 
     async activate({target}: React.ChangeEvent<HTMLInputElement>) {
+        this.statusClass = 'inactive'
+
         try {
             await axios.patch('http://localhost:8000/devices/1', {
                 active: target.checked,
                 fade: true,
                 color: 'hsv-300-1-1'
             })
+
+            this.statusClass = target.checked ? 'success' : 'inactive'
         } catch (e) {
             throw e
         }

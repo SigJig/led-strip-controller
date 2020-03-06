@@ -1,8 +1,26 @@
 
+@import 'colors';
+
 .success {
     background-color: $success !important;
 }
 
 .inactive {
     background-color: $inactive !important;
+}
+
+.error {
+    background-color: $error !important;
+}
+
+.border-success {
+    border-color: $success !important;
+}
+
+.border-inactive {
+    border-color: $inactive !important;
+}
+
+.border-error {
+    border-color: $error !important;
 }

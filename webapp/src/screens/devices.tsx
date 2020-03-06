@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { IDevice, IButton } from '../devices/base'
+import { IDevice, IButton, statusClasses } from '../devices/base'
 import './devices.scss'
 
 export interface IDevicesProps {
@@ -23,7 +23,6 @@ export default class Devices extends React.Component<IDevicesProps, {}> {
 
     renderDevices() {
         const { devices } = this.props
-        console.log(devices)
 
         return (
             <ul className="device-list">
@@ -32,14 +31,14 @@ export default class Devices extends React.Component<IDevicesProps, {}> {
                         const {buttons, title, icon, desc, activate} = device
 
                         return (
-                            <li className="device-item">
+                            <li className={`device-item ${statusClasses[device.statusClass!]}`}>
                                 {React.createElement(icon, {className: "icon"})}
                                 <span className="title">{title}</span>
                                 {desc && (
                                     <span className="desc">{desc}</span>
                                 )}
                                 <label>
-                                    <input type="checkbox" onChange={activate.bind(device)}/>
+                                    <input type="checkbox" onChange={this.handleActivate.bind(this, device)}/>
                                     <span/>
                                 </label>
                                 {buttons && buttons.length && this.renderButtons(buttons)}
@@ -49,6 +48,14 @@ export default class Devices extends React.Component<IDevicesProps, {}> {
                 }
             </ul>
         )
+    }
+
+    async handleActivate(device: IDevice, event: React.ChangeEvent<HTMLInputElement>) {
+        const { activate } = device
+
+        await activate.call(device, event)
+
+        this.forceUpdate()
     }
 
     render() {
