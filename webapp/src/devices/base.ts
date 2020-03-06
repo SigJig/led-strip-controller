@@ -1,4 +1,6 @@
 
+import React from 'react'
+
 export interface IButton {
     renderIcon?: CallableFunction,
     title: string,
@@ -9,5 +11,6 @@ export interface IDevice {
     buttons: IButton[],
     title: string,
     icon: any,
-    desc?: string
+    desc?: string,
+    activate: ((event: React.ChangeEvent<HTMLInputElement>) => void)
 }

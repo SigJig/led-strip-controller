@@ -1,5 +1,6 @@
 
 import React from 'react'
+import axios from 'axios'
 import Strings from '../const/strings'
 
 import { IDevice, IButton } from './base'
@@ -27,5 +28,17 @@ export default class RGBStrip implements IDevice {
                 renderIcon: () => React.createElement(Gear, {})
             }
         ]
+    }
+
+    async activate({target}: React.ChangeEvent<HTMLInputElement>) {
+        try {
+            await axios.patch('http://localhost:8000/devices/1', {
+                active: target.checked,
+                fade: true,
+                color: 'hsv-300-1-1'
+            })
+        } catch (e) {
+            throw e
+        }
     }
 }

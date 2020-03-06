@@ -28,20 +28,24 @@ export default class Devices extends React.Component<IDevicesProps, {}> {
         return (
             <ul className="device-list">
                 {
-                    devices.map(({buttons, title, icon, desc}) => (
-                        <li className="device-item">
-                            {React.createElement(icon, {className: "icon"})}
-                            <span className="title">{title}</span>
-                            {desc && (
-                                <span className="desc">{desc}</span>
-                            )}
-                            <label>
-                                <input type="checkbox"/>
-                                <span/>
-                            </label>
-                            {buttons && buttons.length && this.renderButtons(buttons)}
-                        </li>
-                    ))
+                    devices.map((device: IDevice) => {
+                        const {buttons, title, icon, desc, activate} = device
+
+                        return (
+                            <li className="device-item">
+                                {React.createElement(icon, {className: "icon"})}
+                                <span className="title">{title}</span>
+                                {desc && (
+                                    <span className="desc">{desc}</span>
+                                )}
+                                <label>
+                                    <input type="checkbox" onChange={activate.bind(device)}/>
+                                    <span/>
+                                </label>
+                                {buttons && buttons.length && this.renderButtons(buttons)}
+                            </li>
+                        )
+                    })
                 }
             </ul>
         )
