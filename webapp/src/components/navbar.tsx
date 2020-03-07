@@ -3,18 +3,34 @@ import React from 'react'
 import Strings from '../const/strings'
 import './navbar.scss'
 
+import { IconType } from 'react-icons'
 import { AiOutlineBulb } from 'react-icons/ai'
 import { GoGear } from 'react-icons/go'
 import { IoIosLink } from 'react-icons/io'
+
+import Devices from '../screens/devices'
+
+import RGBStrip from '../devices/rgbstrip'
+
+import {
+    BrowserRouter as Router,
+    NavLink,
+    Route,
+    Switch
+} from 'react-router-dom'
 
 interface INavState {
     date: Date
 }
 
-const routes = [
-    [Strings.devices, AiOutlineBulb],
-    [Strings.connectors, IoIosLink],
-    [Strings.settings, GoGear]
+const devices = [
+    new RGBStrip("Testing strip", "#9c0879"),
+]
+
+const routes: [string, string, IconType][] = [
+    ['/devices', Strings.devices, AiOutlineBulb],
+    ['/connectors', Strings.connectors, IoIosLink],
+    ['/settings', Strings.settings, GoGear]
 ]
 
 export default class Navbar extends React.Component<{}, INavState> {
@@ -47,17 +63,25 @@ export default class Navbar extends React.Component<{}, INavState> {
 
     render() {
         return (
-            <nav className="navbar">
-                <span className="fs-nav-elem">{this.fmtDate.apply(this)}</span>
-                <ul>
-                    {routes.map(([text, icon]) => (
-                        <li>
-                            <span className="fs-nav-elem">{text}</span>
-                            {React.createElement(icon, {className: "mob-nav-elem"})}
-                        </li>
-                    ))}
-                </ul>
-            </nav>
+            <Router>
+                <nav className="navbar">
+                    <span id="clock" className="fs-nav-elem">{this.fmtDate.apply(this)}</span>
+                    <ul>
+                        {routes.map(([route, text, icon]) => (
+                            <li>
+                                <NavLink to={route} activeClassName="active">
+                                    <span className="fs-nav-elem">{text}</span>
+                                    {React.createElement(icon, {className: "mob-nav-elem"})}
+                                </NavLink>
+                            </li>
+                        ))}
+                    </ul>
+                </nav>
+
+                <Switch>
+                    <Route path="/devices"><Devices devices={devices}/></Route>
+                </Switch>
+            </Router>
         )
     }
 }

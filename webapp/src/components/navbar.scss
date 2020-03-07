@@ -53,7 +53,7 @@
         display: none;
     }
     
-    span {
+    #clock {
         position: absolute;
         color: $text-main;
         padding: 0 $spacing;
@@ -69,7 +69,7 @@
         right: 0;
         justify-content: space-evenly;
         
-        li {
+        li a {
             cursor: pointer;
             display: flex;
             height: 100%;
@@ -80,12 +80,26 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            text-decoration: none;
 
             @include transition($transition-time);
 
-            &:hover, &:active, &:focus {
-                color: $success;
-            
+            &:hover {
+                span {
+                    color: $inactive !important;
+                }
+
+                &:after {
+                    opacity: 1;
+                    background-color: $inactive !important;
+                }
+            }
+
+            &:active, &.active {
+                span {
+                    color: $success !important;
+                }
+
                 &:after {
                     opacity: 1;
                     background-color: $success !important;

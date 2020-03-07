@@ -28,7 +28,7 @@ export default class Devices extends React.Component<IDevicesProps, {}> {
             <ul className="device-list">
                 {
                     devices.map((device: IDevice) => {
-                        const {buttons, title, icon, desc, activate} = device
+                        const { buttons, title, icon, desc } = device
 
                         return (
                             <li className={`device-item ${statusClasses[device.statusClass!]}`}>
