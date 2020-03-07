@@ -21,7 +21,7 @@ export default class Devices extends React.Component<IDevicesProps, IDevicesStat
     }
 
     async refreshLoop() {
-        this.refresh()
+        await this.refresh()
 
         setTimeout(async () => {
             await this.refreshLoop()
