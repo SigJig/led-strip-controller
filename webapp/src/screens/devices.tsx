@@ -14,10 +14,22 @@ export interface IDevicesState {
 export default class Devices extends React.Component<IDevicesProps, IDevicesState> {
     state = { loading: true }
 
-    async componentDidMount() {
+    async refresh() {
         await Promise.all(this.props.devices.map(x => x.fetch()))
 
         this.setState({loading: false})
+    }
+
+    async refreshLoop() {
+        this.refresh()
+
+        setTimeout(async () => {
+            await this.refreshLoop()
+        }, 2000)
+    }
+
+    componentDidMount() {
+        this.refreshLoop()
     }
 
     renderButtons(buttons: IButton[]) {
