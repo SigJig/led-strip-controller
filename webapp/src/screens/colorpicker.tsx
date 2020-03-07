@@ -3,6 +3,7 @@ import React from 'react'
 import './colorpicker.scss'
 
 import { MdDone as Done, MdExitToApp as Cancel } from 'react-icons/md'
+import RGBStrip from '../devices/rgbstrip'
 
 export interface HSV {
     hue: number,
@@ -21,7 +22,8 @@ export interface IColorPickerState {
 }
 
 export interface IColorPickerProps {
-    hsv: HSV
+    hsv: HSV,
+    device: RGBStrip
 }
 
 export default class Colorpicker extends React.Component<IColorPickerProps, IColorPickerState> {
@@ -49,6 +51,8 @@ export default class Colorpicker extends React.Component<IColorPickerProps, ICol
             ...this.state.hsv,
             hue: hue
         }})
+
+        this.deviceUpdate()
     }
 
     onPaletteClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -56,9 +60,17 @@ export default class Colorpicker extends React.Component<IColorPickerProps, ICol
 
         this.setState({hsv: {
             ...this.state.hsv,
-            sat: 1 - Math.min((event.pageY - top) / (bottom - top), 1),// / event.nativeEvent.offsetWidth
-            val: (event.pageX - left) / (right - left)
+            val: 1 - Math.min((event.pageY - top) / (bottom - top), 1),// / event.nativeEvent.offsetWidth
+            sat: (event.pageX - left) / (right - left)
         }})
+
+        this.deviceUpdate()
+    }
+
+    deviceUpdate() {
+        const { device } = this.props
+
+        device.setColor(this.state.hsv)
     }
 
     render() {

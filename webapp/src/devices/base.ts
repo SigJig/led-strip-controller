@@ -20,5 +20,10 @@ export interface IDevice {
     icon: any,
     desc?: string,
     statusClass: StatusType,
-    activate: ((event: React.ChangeEvent<HTMLInputElement>) => void)
+    activate: ((event: React.MouseEvent<HTMLInputElement, MouseEvent>) => void),
+    data: {
+        active: boolean,
+        [propName: string]: any
+    },
+    fetch: () => Promise<any>
 }

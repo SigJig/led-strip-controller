@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { MouseEvent } from 'react'
 import { IDevice, IButton, statusClasses } from '../devices/base'
 import './devices.scss'
 
@@ -7,7 +7,19 @@ export interface IDevicesProps {
     devices: Array<IDevice>
 }
 
-export default class Devices extends React.Component<IDevicesProps, {}> {
+export interface IDevicesState {
+    loading: boolean
+}
+
+export default class Devices extends React.Component<IDevicesProps, IDevicesState> {
+    state = { loading: true }
+
+    async componentDidMount() {
+        await Promise.all(this.props.devices.map(x => x.fetch()))
+
+        this.setState({loading: false})
+    }
+
     renderButtons(buttons: IButton[]) {
         return (
             <ul className="buttons">
@@ -22,13 +34,15 @@ export default class Devices extends React.Component<IDevicesProps, {}> {
     }
 
     renderDevices() {
+        if (this.state.loading) return <h1>Loading</h1>
+
         const { devices } = this.props
 
         return (
             <ul className="device-list">
                 {
                     devices.map((device: IDevice) => {
-                        const { buttons, title, icon, desc } = device
+                        const { buttons, title, icon, desc, data } = device
 
                         return (
                             <li className={`device-item ${statusClasses[device.statusClass!]}`}>
@@ -38,7 +52,7 @@ export default class Devices extends React.Component<IDevicesProps, {}> {
                                     <span className="desc">{desc}</span>
                                 )}
                                 <label>
-                                    <input type="checkbox" onChange={this.handleActivate.bind(this, device)}/>
+                                    <input type="checkbox" checked={data.active} onClick={(e) => this.handleActivate(device, e)}/>
                                     <span/>
                                 </label>
                                 {buttons && buttons.length && this.renderButtons(buttons)}
@@ -50,7 +64,7 @@ export default class Devices extends React.Component<IDevicesProps, {}> {
         )
     }
 
-    async handleActivate(device: IDevice, event: React.ChangeEvent<HTMLInputElement>) {
+    async handleActivate(device: IDevice, event: any) {
         const { activate } = device
 
         await activate.call(device, event)
