@@ -2,29 +2,13 @@
 import enum
 import falcon
 from connectors.mqtt import MQTTConnector
-
-class HSV:
-    def __init__(self, dict_=None, **kwargs):
-        if dict_ is None:
-            dict_ = kwargs
-
-        print(dict_)
-
-        self.hue = dict_.get('hue')
-        self.sat = dict_.get('sat')
-        self.val = dict_.get('val')
-
-    def __str__(self):
-        return f'hsv-{self.hue}-{self.sat}-{self.val}'
-
-    def to_dict(self):
-        return vars(self)
+from color import color_handler, HSV
 
 class RGBStrip:
     opts = {
         'active': bool,
         'fade': bool,
-        'color': HSV
+        'color': color_handler
     }
 
     state = {
@@ -34,22 +18,15 @@ class RGBStrip:
     }
 
     def __init__(self, **conn_args):
-        print('rgbstrip initalized')
         self.connector = MQTTConnector.instance(**conn_args)
 
-    def on_get(self, req, resp, *args, **kwargs):
-        resp.media = self.to_dict()
-
-    def on_patch(self, req, resp, *args, **kwargs):
-        for k, v in req.media.items():
+    def update(self, body):
+        for k, v in body.items():
             if k.lower() not in self.opts:
                 raise falcon.HTTPBadRequest(f'Unrecognized field {k}')
 
             type_ = self.opts[k]
             self.state[k] = type_(v)
-
-        resp.status = falcon.HTTP_200
-        resp.media = self.to_dict()
 
         self._write()
 
