@@ -11,13 +11,16 @@ class RGBStrip:
         'color': color_handler
     }
 
+    data = {}
+
     state = {
         'active': False,
         'fade': True,
         'color': HSV(hue=0, sat=1, val=1)
     }
 
-    def __init__(self, **conn_args):
+    def __init__(self, name, desc, **conn_args):
+        self.data['name'], self.data['desc'] = name, desc
         self.connector = MQTTConnector.instance(**conn_args)
 
     def update(self, body):
@@ -31,7 +34,12 @@ class RGBStrip:
         self._write()
 
     def to_dict(self):
-        return {**self.state, 'color': self.state['color'].to_dict()}
+        return {
+            **self.data,
+            'state': {
+                **self.state, 'color': self.state['color'].to_dict()
+            }
+        }
 
     def _write(self):
         flag = self.ControlFlags.NA

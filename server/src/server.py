@@ -4,7 +4,7 @@ import falcon
 from devices.rgbstrip import RGBStrip
 
 DEVICES = [
-    RGBStrip(host='localhost', port=1883)
+    RGBStrip(name='Testing strip', desc='RGB Ledstrip', host='localhost', port=1883)
 ]
 
 class DeviceResource:
