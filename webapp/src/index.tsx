@@ -4,17 +4,13 @@ import ReactDOM from 'react-dom'
 import './index.scss'
 import * as serviceWorker from './serviceWorker'
 
-import Navbar from './components/navbar'
+import Navbar, { devices } from './components/navbar'
 import Colorpicker from './screens/colorpicker'
 import RGBStrip from './devices/rgbstrip'
 
-const devices = [
-    new RGBStrip("Testing strip", "#9c0879"),
-]
-
 const App: React.FC = () => {
-    return <Navbar/>
-    //return <Colorpicker device={devices[0]} hsv={devices[0].data.hsv}/>
+    //return <Navbar/>
+    return <Colorpicker device={devices[0]}/>
 }
 
 ReactDOM.render(<App/>, document.getElementById('root'))

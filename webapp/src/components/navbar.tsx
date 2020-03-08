@@ -23,8 +23,8 @@ interface INavState {
     date: Date
 }
 
-const devices = [
-    new RGBStrip("Testing strip", "#9c0879"),
+export const devices = [
+    new RGBStrip(0),
 ]
 
 const routes: [string, string, IconType][] = [

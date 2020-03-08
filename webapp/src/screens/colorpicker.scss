@@ -46,12 +46,12 @@
                     height: 100%;
                 }
 
-                #sat {
+                #value {
                     z-index: 2;
                     background: linear-gradient(to top, rgb(0, 0, 0), transparent);
                 }
 
-                #value {
+                #sat {
                     z-index: 1;
                     background: linear-gradient(to right, rgb(255, 255, 255), transparent);
                 }

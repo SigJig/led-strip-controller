@@ -1,5 +1,5 @@
 
-import React, { MouseEvent } from 'react'
+import React from 'react'
 import { IDevice, IButton, statusClasses } from '../devices/base'
 import './devices.scss'
 

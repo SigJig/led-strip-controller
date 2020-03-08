@@ -3,33 +3,30 @@ import React from 'react'
 import axios from 'axios'
 import Strings from '../const/strings'
 
+import { IconType } from 'react-icons'
 import { IDevice, IButton, StatusType } from './base'
 import { AiOutlineBulb as Bulb } from 'react-icons/ai'
 import { GoGear as Gear } from 'react-icons/go'
 import { Circle } from '../components/shapes'
-import Colorpicker, { HSV } from '../screens/colorpicker'
+import colorHandler, { HSV } from '../utils/color'
+import Colorpicker from '../screens/colorpicker'
 
-const URI = 'http://192.168.1.220:8000/devices/1'
+const URI = 'http://192.168.1.220:8000/devices'
 
 export default class RGBStrip implements IDevice {
-    public icon: any
+    public icon: IconType = Bulb
     public buttons: IButton[]
     public statusClass: StatusType= 'inactive'
-    public data: { hsv: HSV, active: boolean, fade: boolean } = {
-        hsv: {hue: 0, sat: 1, val: 1},
-        active: true,
-        fade: true
-    }
+    public title!: string
+    public desc!: string
+    public data!: { color: HSV, active: boolean, fade: boolean }
 
-    constructor(public title: string, public color: string, public desc?: string) {
-
-        this.icon = Bulb
-        this.desc = desc || Strings.rgbstrip
+    constructor(public id: number) {
         this.buttons = [
             {
                 title: Strings.changeColor,
-                action: () => React.createElement(Colorpicker, {device: this, hsv: this.data.hsv}),
-                renderIcon: () => React.createElement(Circle, {color: this.color})
+                action: () => React.createElement(Colorpicker, {device: this}),
+                renderIcon: () => React.createElement(Circle, {color: this.data.color.cssString})
             },
             {
                 title: Strings.manage,
@@ -39,20 +36,26 @@ export default class RGBStrip implements IDevice {
         ]
     }
 
-    setColor(hsv: HSV) {
-        this.data.hsv = hsv
+    get endpoint(): string {
+        return `${URI}/${this.id}`
+    }
 
-        
+    setColor(hsv: HSV) {
+        this.data.color = hsv
+
         return this.sendUpdate()
     }
     
     sendUpdate() {
-        const { active, fade, hsv } = this.data
+        const { active, fade, color } = this.data
+        const { type, value } = color
         
-        return axios.patch(URI, {
+        return axios.patch(this.endpoint, {
             active,
             fade,
-            color: hsv
+            color: {
+                type, value
+            }
         })
     }
 
@@ -61,12 +64,15 @@ export default class RGBStrip implements IDevice {
     }
 
     async fetch() {
-        const { active, fade, color } = (await axios.get(URI)).data
+        const { state, name, desc } = (await axios.get(this.endpoint)).data
+        const { active, fade, color } = state
 
+        this.title = name
+        this.desc = desc
         this.data = {
             active,
             fade,
-            hsv: color
+            color: colorHandler(color)
         }
 
         this.setStatusClass()
