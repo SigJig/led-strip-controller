@@ -9,8 +9,7 @@ import Colorpicker from './screens/colorpicker'
 import RGBStrip from './devices/rgbstrip'
 
 const App: React.FC = () => {
-    //return <Navbar/>
-    return <Colorpicker device={devices[0]}/>
+    return <Navbar/>
 }
 
 ReactDOM.render(<App/>, document.getElementById('root'))

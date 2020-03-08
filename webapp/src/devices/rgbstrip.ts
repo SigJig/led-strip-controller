@@ -8,8 +8,8 @@ import { IDevice, IButton, StatusType } from './base'
 import { AiOutlineBulb as Bulb } from 'react-icons/ai'
 import { GoGear as Gear } from 'react-icons/go'
 import { Circle } from '../components/shapes'
+import { Redirect } from 'react-router-dom'
 import colorHandler, { HSV } from '../utils/color'
-import Colorpicker from '../screens/colorpicker'
 
 const URI = 'http://192.168.1.220:8000/devices'
 
@@ -25,7 +25,9 @@ export default class RGBStrip implements IDevice {
         this.buttons = [
             {
                 title: Strings.changeColor,
-                action: () => React.createElement(Colorpicker, {device: this}),
+                action: function (this: any, ...rest: any[]) {
+                    this.setState({redirect: `/devices/${id}/color`})
+                },
                 renderIcon: () => React.createElement(Circle, {color: this.data.color.cssString})
             },
             {

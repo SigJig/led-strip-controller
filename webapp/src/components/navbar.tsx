@@ -9,6 +9,7 @@ import { GoGear } from 'react-icons/go'
 import { IoIosLink } from 'react-icons/io'
 
 import Devices from '../screens/devices'
+import Colorpicker from '../screens/colorpicker'
 
 import RGBStrip from '../devices/rgbstrip'
 
@@ -16,7 +17,8 @@ import {
     BrowserRouter as Router,
     NavLink,
     Route,
-    Switch
+    Switch,
+    Link
 } from 'react-router-dom'
 
 interface INavState {
@@ -79,6 +81,7 @@ export default class Navbar extends React.Component<{}, INavState> {
                 </nav>
 
                 <Switch>
+                    <Route path="/devices/:deviceId/color" component={Colorpicker}/>
                     <Route path="/devices"><Devices devices={devices}/></Route>
                 </Switch>
             </Router>

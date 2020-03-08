@@ -4,15 +4,20 @@ import './colorpicker.scss'
 
 import { MdDone as Done, MdExitToApp as Cancel } from 'react-icons/md'
 import { Color, HSV } from '../utils/color'
+import { devices } from '../components/navbar'
 import RGBStrip from '../devices/rgbstrip'
+
+import { match, Redirect } from 'react-router-dom'
 
 export interface IColorPickerState {
     color?: HSV,
-    loading: boolean
+    device?: RGBStrip,
+    loading: boolean,
+    done: boolean
 }
 
 export interface IColorPickerProps {
-    device: RGBStrip
+    match: match
 }
 
 export default class Colorpicker extends React.Component<IColorPickerProps, IColorPickerState> {
@@ -22,7 +27,7 @@ export default class Colorpicker extends React.Component<IColorPickerProps, ICol
         this.onSliderClick = this.onSliderClick.bind(this)
         this.onPaletteClick = this.onPaletteClick.bind(this)
 
-        this.state = { loading: true }
+        this.state = { loading: true, done: false }
     }
 
     onSliderClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -30,7 +35,7 @@ export default class Colorpicker extends React.Component<IColorPickerProps, ICol
         const hue = ((event.pageX - left) / width) * 360
 
         this.state.color!.set({hue: hue})
-        this.forceUpdate()
+        this.deviceUpdate()
     }
 
     onPaletteClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -40,27 +45,31 @@ export default class Colorpicker extends React.Component<IColorPickerProps, ICol
             val: 1 - Math.min((event.pageY - top) / height, 1),// / event.nativeEvent.offsetWidth
             sat: (event.pageX - left) / width
         })
-        this.forceUpdate()
+        this.deviceUpdate()
     }
 
     deviceUpdate() {
-        const { device } = this.props
+        const { device, color } = this.state
 
-        device.setColor(this.state.color!)
+        device!.setColor(color!)
     }
 
     async componentDidMount() {
-        await this.props.device.fetch()
+        const { deviceId }: any = this.props.match.params
+        const device = devices[parseInt(deviceId)]
 
-        this.setState({loading: false, color: this.props.device.data.color})
-    }
+        console.log(device, deviceId, this.props)
 
-    componentDidUpdate() {
-        this.deviceUpdate()
+        await device!.fetch()
+
+        this.setState({loading: false, color: device!.data.color, device: device})
     }
 
     render() {
         if (this.state.loading) return <h1>Loading</h1>
+
+        if (this.state.done)
+            return <Redirect to="/devices"/>
 
         const { color } = this.state
         const { hue, cssString } = color!
@@ -78,8 +87,7 @@ export default class Colorpicker extends React.Component<IColorPickerProps, ICol
                     <div className="hue-slider" onClick={this.onSliderClick}/>
                 </div>
                 <ul className="control-buttons">
-                    <li><Cancel/></li>
-                    <li><Done/></li>
+                    <li onClick={() => this.setState({done: true})}><Done/></li>
                 </ul>
             </div>
         )

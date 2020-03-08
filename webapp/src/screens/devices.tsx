@@ -2,22 +2,22 @@
 import React from 'react'
 import { IDevice, IButton, statusClasses } from '../devices/base'
 import './devices.scss'
+import { Redirect } from 'react-router-dom'
 
 export interface IDevicesProps {
     devices: Array<IDevice>
 }
 
 export interface IDevicesState {
-    loading: boolean
+    loading: boolean,
+    redirect?: string
 }
 
 export default class Devices extends React.Component<IDevicesProps, IDevicesState> {
-    state = { loading: true }
+    state = { loading: true, redirect: undefined }
 
     async refresh() {
         await Promise.all(this.props.devices.map(x => x.fetch()))
-
-        this.setState({loading: false})
     }
 
     async refreshLoop() {
@@ -28,15 +28,17 @@ export default class Devices extends React.Component<IDevicesProps, IDevicesStat
         }, 2000)
     }
 
-    componentDidMount() {
-        this.refreshLoop()
+    async componentDidMount() {
+        await this.refreshLoop()
+
+        this.setState({loading: false})
     }
 
     renderButtons(buttons: IButton[]) {
         return (
             <ul className="buttons">
                 {buttons.map(x => (
-                    <li onClick={x.action}>
+                    <li onClick={x.action.bind(this)}>
                         {x.renderIcon && x.renderIcon()}
                         <span>{x.title}</span>
                     </li>
@@ -85,6 +87,8 @@ export default class Devices extends React.Component<IDevicesProps, IDevicesStat
     }
 
     render() {
+        if (this.state.redirect) return <Redirect to={this.state.redirect!}/>
+
         return (
             <div className="container">
                 {this.renderDevices()}
