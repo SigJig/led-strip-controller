@@ -34,7 +34,11 @@ class CorsMiddleware:
         resp.set_header('Access-Control-Allow-Methods', '*')
         resp.set_header('Access-Control-Allow-Headers', '*')
 
-app = falcon.App(middleware=[CorsMiddleware()])
+class LoggerMiddleware:
+    def process_request(self, req, resp):
+        print(f'{req.method} request recieved')
+
+app = falcon.App(middleware=[CorsMiddleware(), LoggerMiddleware()])
 
 app.add_route('/devices/{device_id:int}', DeviceResource())
 
