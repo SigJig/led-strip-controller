@@ -43,13 +43,14 @@ class _Client(discord.Client):
         if command == 'set':
             color_raw = args.pop(0)
             
-            if save := options.get('save', None):
+            save = options.get('save', None)
+            if save:
                 COLORS[save] = color_raw
 
             try:
                 color = get_color(color_raw)
             except ValueError:
-                embed = discord.Embed(description='E du mongo æll')#, color='#ff0000')
+                embed = discord.Embed(description='kjeft')#, color='#ff0000')
             else:
                 embed = discord.Embed(description=f'Color changed to {color}')#, color=color_raw)
 
